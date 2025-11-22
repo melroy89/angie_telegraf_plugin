@@ -1556,7 +1556,7 @@ func prepareAddr(t *testing.T, ts *httptest.Server) (addr *url.URL, host, port s
 
 func prepareEndpoint(t *testing.T, path, payload string) (*httptest.Server, *AngieAPI) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fullPath := fmt.Sprintf("/api/%d/%s", defaultAPIVersion, path)
+		fullPath := fmt.Sprintf("/api/%s", path)
 		if r.URL.Path != fullPath {
 			w.WriteHeader(http.StatusInternalServerError)
 			t.Errorf("Unknown request path, expected: %q, actual: %q", fullPath, r.URL.Path)

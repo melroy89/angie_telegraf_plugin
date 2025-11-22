@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	// errNotFound signals that the NGINX API routes does not exist.
+	// errNotFound signals that the Angie API routes does not exist.
 	errNotFound = errors.New("not found")
 )
 
@@ -30,19 +30,14 @@ func (n *AngieAPI) gatherMetrics(addr *url.URL, acc telegraf.Accumulator) {
 	addError(acc, n.gatherHTTPCachesMetrics(addr, acc))
 	addError(acc, n.gatherStreamServerZonesMetrics(addr, acc))
 	addError(acc, n.gatherStreamUpstreamsMetrics(addr, acc))
-
-	if n.APIVersion >= 5 {
-		addError(acc, n.gatherHTTPLocationZonesMetrics(addr, acc))
-		addError(acc, n.gatherResolverZonesMetrics(addr, acc))
-	}
-	if n.APIVersion >= 6 {
-		addError(acc, n.gatherHTTPLimitReqsMetrics(addr, acc))
-	}
+	addError(acc, n.gatherHTTPLocationZonesMetrics(addr, acc))
+	addError(acc, n.gatherResolverZonesMetrics(addr, acc))
+	addError(acc, n.gatherHTTPLimitReqsMetrics(addr, acc))
 }
 
 func addError(acc telegraf.Accumulator, err error) {
 	// This plugin has hardcoded API resource paths it checks that may not
-	// be in the nginx.conf.  Currently, this is to prevent logging of
+	// be in the angie.conf.  Currently, this is to prevent logging of
 	// paths that are not configured.
 	//
 	// The correct solution is to do a GET to /api to get the available paths
@@ -53,7 +48,7 @@ func addError(acc telegraf.Accumulator, err error) {
 }
 
 func (n *AngieAPI) gatherURL(addr *url.URL, path string) ([]byte, error) {
-	address := fmt.Sprintf("%s/%d/%s", addr.String(), n.APIVersion, path)
+	address := fmt.Sprintf("%s/%s", addr.String(), path)
 	resp, err := n.client.Get(address)
 
 	if err != nil {
@@ -64,7 +59,7 @@ func (n *AngieAPI) gatherURL(addr *url.URL, path string) ([]byte, error) {
 	switch resp.StatusCode {
 	case http.StatusOK:
 	case http.StatusNotFound:
-		// format as special error to catch and ignore as some nginx API
+		// format as special error to catch and ignore as some Angie API
 		// features are either optional, or only available in some versions
 		return nil, errNotFound
 	default:
@@ -282,7 +277,6 @@ func (n *AngieAPI) gatherHTTPServerZonesMetrics(addr *url.URL, acc telegraf.Accu
 	return nil
 }
 
-// Added in 5 API version
 func (n *AngieAPI) gatherHTTPLocationZonesMetrics(addr *url.URL, acc telegraf.Accumulator) error {
 	body, err := n.gatherURL(addr, httpLocationZonesPath)
 	if err != nil {
@@ -502,7 +496,6 @@ func (n *AngieAPI) gatherStreamServerZonesMetrics(addr *url.URL, acc telegraf.Ac
 	return nil
 }
 
-// Added in 5 API version
 func (n *AngieAPI) gatherResolverZonesMetrics(addr *url.URL, acc telegraf.Accumulator) error {
 	body, err := n.gatherURL(addr, resolverZonesPath)
 	if err != nil {
@@ -615,7 +608,6 @@ func (n *AngieAPI) gatherStreamUpstreamsMetrics(addr *url.URL, acc telegraf.Accu
 	return nil
 }
 
-// Added in 6 API version
 func (n *AngieAPI) gatherHTTPLimitReqsMetrics(addr *url.URL, acc telegraf.Accumulator) error {
 	body, err := n.gatherURL(addr, httpLimitReqsPath)
 	if err != nil {

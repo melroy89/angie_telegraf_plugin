@@ -31,7 +31,7 @@ See the [CONFIGURATION.md](https://github.com/influxdata/telegraf/blob/master/do
 
 ## Configuration
 
-```toml @plugin.conf
+```toml @example.conf
 # Read Angie API advanced status information
 [[inputs.angie_api]]
   ## An array of Angie API URIs to gather stats.
@@ -262,8 +262,10 @@ Using this configuration:
 When run with:
 
 ```sh
-./telegraf -config telegraf.conf -input-filter angie_api -test
+telegraf --config telegraf.conf --input-filter angie_api --test
 ```
+
+*Note:* Use `--sample-config` if you wish to use the included example configuration instead.
 
 It produces:
 

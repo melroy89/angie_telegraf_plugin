@@ -36,7 +36,7 @@ const sampleConfig = `
 
 const (
 	// Default settings
-	defaultAPIVersion = 3
+	defaultAPIVersion = 1
 
 	// Paths
 	processesPath   = "processes"
@@ -72,13 +72,13 @@ func (*AngieAPI) SampleConfig() string {
 func (n *AngieAPI) Gather(acc telegraf.Accumulator) error {
 	var wg sync.WaitGroup
 
-	// Create an HTTP client that is re-used for each
-	// collection interval
-
+	// Only support API version 1 (currently APIVersion is not yet used)
 	if n.APIVersion == 0 {
 		n.APIVersion = defaultAPIVersion
 	}
 
+	// Create an HTTP client that is re-used for each
+	// collection interval
 	if n.client == nil {
 		client, err := n.createHTTPClient()
 		if err != nil {
@@ -109,6 +109,8 @@ func (n *AngieAPI) createHTTPClient() (*http.Client, error) {
 	if n.HTTPClientConfig.ResponseHeaderTimeout < config.Duration(time.Second) {
 		n.HTTPClientConfig.ResponseHeaderTimeout = config.Duration(time.Second * 5)
 	}
+
+	n.Log.Debugf("Creating HTTP client with response timeout of %s", n.HTTPClientConfig.ResponseHeaderTimeout)
 
 	// Create the client
 	ctx := context.Background()

@@ -55,6 +55,14 @@ See the [CONFIGURATION.md](https://github.com/influxdata/telegraf/blob/master/do
   # insecure_skip_verify = false
 ```
 
+## Developers
+
+For developers (thank you for contributing), you can use to build + run (it will use the `example.conf` file):
+
+```sh
+make rundev
+```
+
 ## Measurements by API version
 
 | Measurement                          | API version (api_version) |

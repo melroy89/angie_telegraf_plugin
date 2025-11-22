@@ -123,9 +123,6 @@ func (n *AngieAPI) createHTTPClient() (*http.Client, error) {
 }
 
 func init() {
-	// Print hello world
-	fmt.Println("Loading angie_api input plugin")
-
 	inputs.Add("angie_api", func() telegraf.Input {
 		return &AngieAPI{}
 	})

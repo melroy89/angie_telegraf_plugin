@@ -11,6 +11,17 @@ This plugin gathers metrics from the free and open-source
 [angie]: https://en.angie.software/
 [api]: https://en.angie.software/angie/docs/configuration/modules/http/http_api/#a-api
 
+## Building from source
+
+Requirements:
+
+- **Golang**: tested on version `go1.25.0 linux/amd64`
+
+Steps:
+- Run `make build`
+- The binary should be available inside `bin/angie_telegraf_plugin`
+
+
 ## Global configuration options
 
 In addition to the plugin-specific configuration settings, plugins support

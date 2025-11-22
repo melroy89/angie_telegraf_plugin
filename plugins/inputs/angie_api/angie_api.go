@@ -121,7 +121,7 @@ func (n *AngieAPI) createHTTPClient() (*http.Client, error) {
 }
 
 func init() {
-	inputs.Add("nginx_plus_api", func() telegraf.Input {
+	inputs.Add("angie_api", func() telegraf.Input {
 		return &AngieAPI{}
 	})
 }

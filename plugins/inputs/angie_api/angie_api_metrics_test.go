@@ -679,7 +679,7 @@ func TestGatherProcessesMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_processes",
+		"angie_api_processes",
 		map[string]interface{}{
 			"respawned": int(0),
 		},
@@ -700,7 +700,7 @@ func TestGatherConnectionsMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_connections",
+		"angie_api_connections",
 		map[string]interface{}{
 			"accepted": int64(1234567890000),
 			"dropped":  int64(2345678900000),
@@ -724,7 +724,7 @@ func TestGatherSlabsMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_slabs_pages",
+		"angie_api_slabs_pages",
 		map[string]interface{}{
 			"used": int64(7),
 			"free": int64(56),
@@ -736,7 +736,7 @@ func TestGatherSlabsMetrics(t *testing.T) {
 		})
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_slabs_pages",
+		"angie_api_slabs_pages",
 		map[string]interface{}{
 			"used": int64(2218),
 			"free": int64(252290),
@@ -748,7 +748,7 @@ func TestGatherSlabsMetrics(t *testing.T) {
 		})
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_slabs_slots",
+		"angie_api_slabs_slots",
 		map[string]interface{}{
 			"used":  int64(1),
 			"free":  int64(503),
@@ -763,7 +763,7 @@ func TestGatherSlabsMetrics(t *testing.T) {
 		})
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_slabs_slots",
+		"angie_api_slabs_slots",
 		map[string]interface{}{
 			"used":  int64(10893),
 			"free":  int64(3),
@@ -789,7 +789,7 @@ func TestGatherSslMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_ssl",
+		"angie_api_ssl",
 		map[string]interface{}{
 			"handshakes":        int64(79572),
 			"handshakes_failed": int64(21025),
@@ -812,7 +812,7 @@ func TestGatherHttpRequestsMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_requests",
+		"angie_api_http_requests",
 		map[string]interface{}{
 			"total":   int64(10624511),
 			"current": int64(4),
@@ -834,7 +834,7 @@ func TestGatherHttpServerZonesMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_server_zones",
+		"angie_api_http_server_zones",
 		map[string]interface{}{
 			"discarded":       int64(2020),
 			"processing":      int(2),
@@ -856,7 +856,7 @@ func TestGatherHttpServerZonesMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_server_zones",
+		"angie_api_http_server_zones",
 		map[string]interface{}{
 			"discarded":       int64(20326),
 			"processing":      int(1),
@@ -888,7 +888,7 @@ func TestGatherHttpLimitReqsMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_limit_reqs",
+		"angie_api_http_limit_reqs",
 		map[string]interface{}{
 			"passed":           int64(2),
 			"delayed":          int64(9),
@@ -904,7 +904,7 @@ func TestGatherHttpLimitReqsMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_limit_reqs",
+		"angie_api_http_limit_reqs",
 		map[string]interface{}{
 			"passed":           int64(451),
 			"delayed":          int64(10),
@@ -930,7 +930,7 @@ func TestGatherHttpLocationZonesMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_location_zones",
+		"angie_api_http_location_zones",
 		map[string]interface{}{
 			"discarded":       int64(2020),
 			"received":        int64(180157219),
@@ -951,7 +951,7 @@ func TestGatherHttpLocationZonesMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_location_zones",
+		"angie_api_http_location_zones",
 		map[string]interface{}{
 			"discarded":       int64(20326),
 			"received":        int64(51575327),
@@ -982,7 +982,7 @@ func TestGatherHttpUpstreamsMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_upstreams",
+		"angie_api_http_upstreams",
 		map[string]interface{}{
 			"keepalive": int(0),
 			"zombies":   int(0),
@@ -995,7 +995,7 @@ func TestGatherHttpUpstreamsMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_upstreams",
+		"angie_api_http_upstreams",
 		map[string]interface{}{
 			"keepalive": int(0),
 			"zombies":   int(0),
@@ -1008,7 +1008,7 @@ func TestGatherHttpUpstreamsMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_upstream_peers",
+		"angie_api_http_upstream_peers",
 		map[string]interface{}{
 			"active":                   int(0),
 			"backup":                   false,
@@ -1043,7 +1043,7 @@ func TestGatherHttpUpstreamsMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_upstream_peers",
+		"angie_api_http_upstream_peers",
 		map[string]interface{}{
 			"active":                   int(0),
 			"backup":                   true,
@@ -1076,7 +1076,7 @@ func TestGatherHttpUpstreamsMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_upstream_peers",
+		"angie_api_http_upstream_peers",
 		map[string]interface{}{
 			"active":                   int(0),
 			"backup":                   false,
@@ -1111,7 +1111,7 @@ func TestGatherHttpUpstreamsMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_upstream_peers",
+		"angie_api_http_upstream_peers",
 		map[string]interface{}{
 			"active":                   int(0),
 			"backup":                   true,
@@ -1154,7 +1154,7 @@ func TestGatherHttpCachesMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_caches",
+		"angie_api_http_caches",
 		map[string]interface{}{
 			"bypass_bytes":              int64(5510647548),
 			"bypass_bytes_written":      int64(44992),
@@ -1188,7 +1188,7 @@ func TestGatherHttpCachesMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_http_caches",
+		"angie_api_http_caches",
 		map[string]interface{}{
 			"bypass_bytes":              int64(5510647548),
 			"bypass_bytes_written":      int64(44992),
@@ -1232,7 +1232,7 @@ func TestGatherResolverZonesMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_resolver_zones",
+		"angie_api_resolver_zones",
 		map[string]interface{}{
 			"name":     int64(25460),
 			"srv":      int64(130),
@@ -1254,7 +1254,7 @@ func TestGatherResolverZonesMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_resolver_zones",
+		"angie_api_resolver_zones",
 		map[string]interface{}{
 			"name":     int64(325460),
 			"srv":      int64(1130),
@@ -1286,7 +1286,7 @@ func TestGatherStreamUpstreams(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_stream_upstreams",
+		"angie_api_stream_upstreams",
 		map[string]interface{}{
 			"zombies": int(0),
 		},
@@ -1298,7 +1298,7 @@ func TestGatherStreamUpstreams(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_stream_upstreams",
+		"angie_api_stream_upstreams",
 		map[string]interface{}{
 			"zombies": int(0),
 		},
@@ -1310,7 +1310,7 @@ func TestGatherStreamUpstreams(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_stream_upstream_peers",
+		"angie_api_stream_upstream_peers",
 		map[string]interface{}{
 			"active":                   int(0),
 			"backup":                   false,
@@ -1337,7 +1337,7 @@ func TestGatherStreamUpstreams(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_stream_upstream_peers",
+		"angie_api_stream_upstream_peers",
 		map[string]interface{}{
 			"active":                   int(0),
 			"backup":                   true,
@@ -1364,7 +1364,7 @@ func TestGatherStreamUpstreams(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_stream_upstream_peers",
+		"angie_api_stream_upstream_peers",
 		map[string]interface{}{
 			"active":                   int(0),
 			"backup":                   false,
@@ -1391,7 +1391,7 @@ func TestGatherStreamUpstreams(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_stream_upstream_peers",
+		"angie_api_stream_upstream_peers",
 		map[string]interface{}{
 			"active":                   int(0),
 			"backup":                   true,
@@ -1428,7 +1428,7 @@ func TestGatherStreamServerZonesMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_stream_server_zones",
+		"angie_api_stream_server_zones",
 		map[string]interface{}{
 			"connections": int(270925),
 			"processing":  int(2),
@@ -1443,7 +1443,7 @@ func TestGatherStreamServerZonesMetrics(t *testing.T) {
 
 	acc.AssertContainsTaggedFields(
 		t,
-		"nginx_plus_api_stream_server_zones",
+		"angie_api_stream_server_zones",
 		map[string]interface{}{
 			"connections": int(155569),
 			"processing":  int(1),

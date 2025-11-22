@@ -98,7 +98,7 @@ func (n *AngieAPI) gatherProcessesMetrics(addr *url.URL, acc telegraf.Accumulato
 	}
 
 	acc.AddFields(
-		"nginx_plus_api_processes",
+		"angie_api_processes",
 		map[string]interface{}{
 			"respawned": processes.Respawned,
 		},
@@ -121,7 +121,7 @@ func (n *AngieAPI) gatherConnectionsMetrics(addr *url.URL, acc telegraf.Accumula
 	}
 
 	acc.AddFields(
-		"nginx_plus_api_connections",
+		"angie_api_connections",
 		map[string]interface{}{
 			"accepted": connections.Accepted,
 			"dropped":  connections.Dropped,
@@ -156,7 +156,7 @@ func (n *AngieAPI) gatherSlabsMetrics(addr *url.URL, acc telegraf.Accumulator) e
 		slabTags["zone"] = zoneName
 
 		acc.AddFields(
-			"nginx_plus_api_slabs_pages",
+			"angie_api_slabs_pages",
 			map[string]interface{}{
 				"used": slab.Pages.Used,
 				"free": slab.Pages.Free,
@@ -172,7 +172,7 @@ func (n *AngieAPI) gatherSlabsMetrics(addr *url.URL, acc telegraf.Accumulator) e
 			slotTags["slot"] = slotID
 
 			acc.AddFields(
-				"nginx_plus_api_slabs_slots",
+				"angie_api_slabs_slots",
 				map[string]interface{}{
 					"used":  slot.Used,
 					"free":  slot.Free,
@@ -200,7 +200,7 @@ func (n *AngieAPI) gatherSslMetrics(addr *url.URL, acc telegraf.Accumulator) err
 	}
 
 	acc.AddFields(
-		"nginx_plus_api_ssl",
+		"angie_api_ssl",
 		map[string]interface{}{
 			"handshakes":        ssl.Handshakes,
 			"handshakes_failed": ssl.HandshakesFailed,
@@ -225,7 +225,7 @@ func (n *AngieAPI) gatherHTTPRequestsMetrics(addr *url.URL, acc telegraf.Accumul
 	}
 
 	acc.AddFields(
-		"nginx_plus_api_http_requests",
+		"angie_api_http_requests",
 		map[string]interface{}{
 			"total":   httpRequests.Total,
 			"current": httpRequests.Current,
@@ -256,7 +256,7 @@ func (n *AngieAPI) gatherHTTPServerZonesMetrics(addr *url.URL, acc telegraf.Accu
 		}
 		zoneTags["zone"] = zoneName
 		acc.AddFields(
-			"nginx_plus_api_http_server_zones",
+			"angie_api_http_server_zones",
 			func() map[string]interface{} {
 				result := map[string]interface{}{
 					"processing":      zone.Processing,
@@ -304,7 +304,7 @@ func (n *AngieAPI) gatherHTTPLocationZonesMetrics(addr *url.URL, acc telegraf.Ac
 		}
 		zoneTags["zone"] = zoneName
 		acc.AddFields(
-			"nginx_plus_api_http_location_zones",
+			"angie_api_http_location_zones",
 			func() map[string]interface{} {
 				result := map[string]interface{}{
 					"requests":        zone.Requests,
@@ -359,7 +359,7 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 			upstreamFields["queue_overflows"] = upstream.Queue.Overflows
 		}
 		acc.AddFields(
-			"nginx_plus_api_http_upstreams",
+			"angie_api_http_upstreams",
 			upstreamFields,
 			upstreamTags,
 		)
@@ -407,7 +407,7 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 			if peer.ID != nil {
 				peerTags["id"] = strconv.Itoa(*peer.ID)
 			}
-			acc.AddFields("nginx_plus_api_http_upstream_peers", peerFields, peerTags)
+			acc.AddFields("angie_api_http_upstream_peers", peerFields, peerTags)
 		}
 	}
 	return nil
@@ -434,7 +434,7 @@ func (n *AngieAPI) gatherHTTPCachesMetrics(addr *url.URL, acc telegraf.Accumulat
 		}
 		cacheTags["cache"] = cacheName
 		acc.AddFields(
-			"nginx_plus_api_http_caches",
+			"angie_api_http_caches",
 			map[string]interface{}{
 				"size":                      cache.Size,
 				"max_size":                  cache.MaxSize,
@@ -488,7 +488,7 @@ func (n *AngieAPI) gatherStreamServerZonesMetrics(addr *url.URL, acc telegraf.Ac
 		}
 		zoneTags["zone"] = zoneName
 		acc.AddFields(
-			"nginx_plus_api_stream_server_zones",
+			"angie_api_stream_server_zones",
 			map[string]interface{}{
 				"processing":  zone.Processing,
 				"connections": zone.Connections,
@@ -524,7 +524,7 @@ func (n *AngieAPI) gatherResolverZonesMetrics(addr *url.URL, acc telegraf.Accumu
 		}
 		zoneTags["zone"] = zoneName
 		acc.AddFields(
-			"nginx_plus_api_resolver_zones",
+			"angie_api_resolver_zones",
 			map[string]interface{}{
 				"name": resolver.Requests.Name,
 				"srv":  resolver.Requests.Srv,
@@ -567,7 +567,7 @@ func (n *AngieAPI) gatherStreamUpstreamsMetrics(addr *url.URL, acc telegraf.Accu
 		}
 		upstreamTags["upstream"] = upstreamName
 		acc.AddFields(
-			"nginx_plus_api_stream_upstreams",
+			"angie_api_stream_upstreams",
 			map[string]interface{}{
 				"zombies": upstream.Zombies,
 			},
@@ -608,7 +608,7 @@ func (n *AngieAPI) gatherStreamUpstreamsMetrics(addr *url.URL, acc telegraf.Accu
 			peerTags["upstream_address"] = peer.Server
 			peerTags["id"] = strconv.Itoa(peer.ID)
 
-			acc.AddFields("nginx_plus_api_stream_upstream_peers", peerFields, peerTags)
+			acc.AddFields("angie_api_stream_upstream_peers", peerFields, peerTags)
 		}
 	}
 
@@ -637,7 +637,7 @@ func (n *AngieAPI) gatherHTTPLimitReqsMetrics(addr *url.URL, acc telegraf.Accumu
 		}
 		limitReqsTags["limit"] = limitReqName
 		acc.AddFields(
-			"nginx_plus_api_http_limit_reqs",
+			"angie_api_http_limit_reqs",
 			map[string]interface{}{
 				"passed":           limit.Passed,
 				"delayed":          limit.Delayed,

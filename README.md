@@ -1,6 +1,6 @@
 # Angie API Input Plugin
 
-This plugin gathers metrics from the free and open-source
+This plugin gathers metrics from the **free** and open-source
 [Angie web server][angie] via the [REST API][api].
 
 

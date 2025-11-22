@@ -8,7 +8,6 @@ import (
 	"net"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 
 	"github.com/influxdata/telegraf"
@@ -23,7 +22,7 @@ func (n *AngieAPI) gatherMetrics(addr *url.URL, acc telegraf.Accumulator) {
 	addError(acc, n.gatherProcessesMetrics(addr, acc))
 	addError(acc, n.gatherConnectionsMetrics(addr, acc))
 	addError(acc, n.gatherSlabsMetrics(addr, acc))
-	addError(acc, n.gatherSslMetrics(addr, acc))
+	// addError(acc, n.gatherSslMetrics(addr, acc))
 	// addError(acc, n.gatherHTTPRequestsMetrics(addr, acc))
 	addError(acc, n.gatherHTTPServerZonesMetrics(addr, acc))
 	addError(acc, n.gatherHTTPUpstreamsMetrics(addr, acc))
@@ -182,31 +181,32 @@ func (n *AngieAPI) gatherSlabsMetrics(addr *url.URL, acc telegraf.Accumulator) e
 	return nil
 }
 
-func (n *AngieAPI) gatherSslMetrics(addr *url.URL, acc telegraf.Accumulator) error {
-	body, err := n.gatherURL(addr, sslPath)
-	if err != nil {
-		return err
-	}
+// func (n *AngieAPI) gatherSslMetrics(addr *url.URL, acc telegraf.Accumulator) error {
+// 	body, err := n.gatherURL(addr, sslPath)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	var ssl = &ssl{}
+// 	var ssl = &ssl{}
 
-	if err := json.Unmarshal(body, ssl); err != nil {
-		return err
-	}
+// 	if err := json.Unmarshal(body, ssl); err != nil {
+// 		return err
+// 	}
 
-	acc.AddFields(
-		"angie_api_ssl",
-		map[string]interface{}{
-			"handshakes":        ssl.Handshakes,
-			"handshakes_failed": ssl.HandshakesFailed,
-			"session_reuses":    ssl.SessionReuses,
-		},
-		getTags(addr),
-	)
+// 	acc.AddFields(
+// 		"angie_api_ssl",
+// 		map[string]interface{}{
+// 			"handshakes":        ssl.Handshakes,
+// 			"handshakes_failed": ssl.HandshakesFailed,
+// 			"session_reuses":    ssl.SessionReuses,
+// 		},
+// 		getTags(addr),
+// 	)
 
-	return nil
-}
+// 	return nil
+// }
 
+// Not used (yet)
 func (n *AngieAPI) gatherHTTPRequestsMetrics(addr *url.URL, acc telegraf.Accumulator) error {
 	body, err := n.gatherURL(addr, httpRequestsPath)
 	if err != nil {
@@ -254,19 +254,165 @@ func (n *AngieAPI) gatherHTTPServerZonesMetrics(addr *url.URL, acc telegraf.Accu
 			"angie_api_http_server_zones",
 			func() map[string]interface{} {
 				result := map[string]interface{}{
-					"processing":      zone.Processing,
-					"requests":        zone.Requests,
-					"responses_1xx":   zone.Responses.Responses1xx,
-					"responses_2xx":   zone.Responses.Responses2xx,
-					"responses_3xx":   zone.Responses.Responses3xx,
-					"responses_4xx":   zone.Responses.Responses4xx,
-					"responses_5xx":   zone.Responses.Responses5xx,
-					"responses_total": zone.Responses.Total,
-					"received":        zone.Received,
-					"sent":            zone.Sent,
+					"total":      zone.Requests.Total,
+					"processing": zone.Requests.Processing,
+					"discarded":  zone.Requests.Discarded,
+					"received":   zone.Data.Received,
+					"sent":       zone.Data.Sent,
 				}
-				if zone.Discarded != nil {
-					result["discarded"] = *zone.Discarded
+
+				// Response codes fields (only include those that are present)
+				if zone.Responses.Response100 != nil {
+					result["responses_100"] = zone.Responses.Response100
+				}
+				if zone.Responses.Response101 != nil {
+					result["responses_101"] = zone.Responses.Response101
+				}
+				if zone.Responses.Response102 != nil {
+					result["responses_102"] = zone.Responses.Response102
+				}
+				if zone.Responses.Response200 != nil {
+					result["responses_200"] = zone.Responses.Response200
+				}
+				if zone.Responses.Response201 != nil {
+					result["responses_201"] = zone.Responses.Response201
+				}
+				if zone.Responses.Response202 != nil {
+					result["responses_202"] = zone.Responses.Response202
+				}
+				if zone.Responses.Response203 != nil {
+					result["responses_203"] = zone.Responses.Response203
+				}
+				if zone.Responses.Response204 != nil {
+					result["responses_204"] = zone.Responses.Response204
+				}
+				if zone.Responses.Response205 != nil {
+					result["responses_205"] = zone.Responses.Response205
+				}
+				if zone.Responses.Response206 != nil {
+					result["responses_206"] = zone.Responses.Response206
+				}
+				if zone.Responses.Response300 != nil {
+					result["responses_300"] = zone.Responses.Response300
+				}
+				if zone.Responses.Response301 != nil {
+					result["responses_301"] = zone.Responses.Response301
+				}
+				if zone.Responses.Response302 != nil {
+					result["responses_302"] = zone.Responses.Response302
+				}
+				if zone.Responses.Response303 != nil {
+					result["responses_303"] = zone.Responses.Response303
+				}
+				if zone.Responses.Response304 != nil {
+					result["responses_304"] = zone.Responses.Response304
+				}
+				if zone.Responses.Response305 != nil {
+					result["responses_305"] = zone.Responses.Response305
+				}
+				if zone.Responses.Response307 != nil {
+					result["responses_307"] = zone.Responses.Response307
+				}
+				if zone.Responses.Response308 != nil {
+					result["responses_308"] = zone.Responses.Response308
+				}
+				if zone.Responses.Response400 != nil {
+					result["responses_400"] = zone.Responses.Response400
+				}
+				if zone.Responses.Response401 != nil {
+					result["responses_401"] = zone.Responses.Response401
+				}
+				if zone.Responses.Response402 != nil {
+					result["responses_402"] = zone.Responses.Response402
+				}
+				if zone.Responses.Response403 != nil {
+					result["responses_403"] = zone.Responses.Response403
+				}
+				if zone.Responses.Response404 != nil {
+					result["responses_404"] = zone.Responses.Response404
+				}
+				if zone.Responses.Response405 != nil {
+					result["responses_405"] = zone.Responses.Response405
+				}
+				if zone.Responses.Response406 != nil {
+					result["responses_406"] = zone.Responses.Response406
+				}
+				if zone.Responses.Response407 != nil {
+					result["responses_407"] = zone.Responses.Response407
+				}
+				if zone.Responses.Response408 != nil {
+					result["responses_408"] = zone.Responses.Response408
+				}
+				if zone.Responses.Response409 != nil {
+					result["responses_409"] = zone.Responses.Response409
+				}
+				if zone.Responses.Response410 != nil {
+					result["responses_410"] = zone.Responses.Response410
+				}
+				if zone.Responses.Response411 != nil {
+					result["responses_411"] = zone.Responses.Response411
+				}
+				if zone.Responses.Response412 != nil {
+					result["responses_412"] = zone.Responses.Response412
+				}
+				if zone.Responses.Response413 != nil {
+					result["responses_413"] = zone.Responses.Response413
+				}
+				if zone.Responses.Response421 != nil {
+					result["responses_421"] = zone.Responses.Response421
+				}
+				if zone.Responses.Response422 != nil {
+					result["responses_422"] = zone.Responses.Response422
+				}
+				if zone.Responses.Response423 != nil {
+					result["responses_423"] = zone.Responses.Response423
+				}
+				if zone.Responses.Response424 != nil {
+					result["responses_424"] = zone.Responses.Response424
+				}
+				if zone.Responses.Response425 != nil {
+					result["responses_425"] = zone.Responses.Response425
+				}
+				if zone.Responses.Response426 != nil {
+					result["responses_426"] = zone.Responses.Response426
+				}
+				if zone.Responses.Response428 != nil {
+					result["responses_428"] = zone.Responses.Response428
+				}
+				if zone.Responses.Response429 != nil {
+					result["responses_429"] = zone.Responses.Response429
+				}
+				if zone.Responses.Response431 != nil {
+					result["responses_431"] = zone.Responses.Response431
+				}
+				if zone.Responses.Response500 != nil {
+					result["responses_500"] = zone.Responses.Response500
+				}
+				if zone.Responses.Response501 != nil {
+					result["responses_501"] = zone.Responses.Response501
+				}
+				if zone.Responses.Response502 != nil {
+					result["responses_502"] = zone.Responses.Response502
+				}
+				if zone.Responses.Response503 != nil {
+					result["responses_503"] = zone.Responses.Response503
+				}
+				if zone.Responses.Response504 != nil {
+					result["responses_504"] = zone.Responses.Response504
+				}
+				if zone.Responses.Response505 != nil {
+					result["responses_505"] = zone.Responses.Response505
+				}
+				if zone.Responses.Response511 != nil {
+					result["responses_511"] = zone.Responses.Response511
+				}
+
+				// SSL (if present)
+				if zone.Ssl != nil {
+					result["ssl_handhaked"] = zone.Ssl.Handshaked
+					result["ssl_reuses"] = zone.Ssl.Reuses
+					result["ssl_timedout"] = zone.Ssl.TimedOut
+					result["ssl_failed"] = zone.Ssl.Failed
 				}
 				return result
 			}(),
@@ -301,18 +447,157 @@ func (n *AngieAPI) gatherHTTPLocationZonesMetrics(addr *url.URL, acc telegraf.Ac
 			"angie_api_http_location_zones",
 			func() map[string]interface{} {
 				result := map[string]interface{}{
-					"requests":        zone.Requests,
-					"responses_1xx":   zone.Responses.Responses1xx,
-					"responses_2xx":   zone.Responses.Responses2xx,
-					"responses_3xx":   zone.Responses.Responses3xx,
-					"responses_4xx":   zone.Responses.Responses4xx,
-					"responses_5xx":   zone.Responses.Responses5xx,
-					"responses_total": zone.Responses.Total,
-					"received":        zone.Received,
-					"sent":            zone.Sent,
+					"total":      zone.Requests.Total,
+					"processing": zone.Requests.Processing,
+					"discarded":  zone.Requests.Discarded,
+					"received":   zone.Data.Received,
+					"sent":       zone.Data.Sent,
 				}
-				if zone.Discarded != nil {
-					result["discarded"] = *zone.Discarded
+
+				// Response codes fields (only include those that are present)
+				if zone.Responses.Response100 != nil {
+					result["responses_100"] = zone.Responses.Response100
+				}
+				if zone.Responses.Response101 != nil {
+					result["responses_101"] = zone.Responses.Response101
+				}
+				if zone.Responses.Response102 != nil {
+					result["responses_102"] = zone.Responses.Response102
+				}
+				if zone.Responses.Response200 != nil {
+					result["responses_200"] = zone.Responses.Response200
+				}
+				if zone.Responses.Response201 != nil {
+					result["responses_201"] = zone.Responses.Response201
+				}
+				if zone.Responses.Response202 != nil {
+					result["responses_202"] = zone.Responses.Response202
+				}
+				if zone.Responses.Response203 != nil {
+					result["responses_203"] = zone.Responses.Response203
+				}
+				if zone.Responses.Response204 != nil {
+					result["responses_204"] = zone.Responses.Response204
+				}
+				if zone.Responses.Response205 != nil {
+					result["responses_205"] = zone.Responses.Response205
+				}
+				if zone.Responses.Response206 != nil {
+					result["responses_206"] = zone.Responses.Response206
+				}
+				if zone.Responses.Response300 != nil {
+					result["responses_300"] = zone.Responses.Response300
+				}
+				if zone.Responses.Response301 != nil {
+					result["responses_301"] = zone.Responses.Response301
+				}
+				if zone.Responses.Response302 != nil {
+					result["responses_302"] = zone.Responses.Response302
+				}
+				if zone.Responses.Response303 != nil {
+					result["responses_303"] = zone.Responses.Response303
+				}
+				if zone.Responses.Response304 != nil {
+					result["responses_304"] = zone.Responses.Response304
+				}
+				if zone.Responses.Response305 != nil {
+					result["responses_305"] = zone.Responses.Response305
+				}
+				if zone.Responses.Response307 != nil {
+					result["responses_307"] = zone.Responses.Response307
+				}
+				if zone.Responses.Response308 != nil {
+					result["responses_308"] = zone.Responses.Response308
+				}
+				if zone.Responses.Response400 != nil {
+					result["responses_400"] = zone.Responses.Response400
+				}
+				if zone.Responses.Response401 != nil {
+					result["responses_401"] = zone.Responses.Response401
+				}
+				if zone.Responses.Response402 != nil {
+					result["responses_402"] = zone.Responses.Response402
+				}
+				if zone.Responses.Response403 != nil {
+					result["responses_403"] = zone.Responses.Response403
+				}
+				if zone.Responses.Response404 != nil {
+					result["responses_404"] = zone.Responses.Response404
+				}
+				if zone.Responses.Response405 != nil {
+					result["responses_405"] = zone.Responses.Response405
+				}
+				if zone.Responses.Response406 != nil {
+					result["responses_406"] = zone.Responses.Response406
+				}
+				if zone.Responses.Response407 != nil {
+					result["responses_407"] = zone.Responses.Response407
+				}
+				if zone.Responses.Response408 != nil {
+					result["responses_408"] = zone.Responses.Response408
+				}
+				if zone.Responses.Response409 != nil {
+					result["responses_409"] = zone.Responses.Response409
+				}
+				if zone.Responses.Response410 != nil {
+					result["responses_410"] = zone.Responses.Response410
+				}
+				if zone.Responses.Response411 != nil {
+					result["responses_411"] = zone.Responses.Response411
+				}
+				if zone.Responses.Response412 != nil {
+					result["responses_412"] = zone.Responses.Response412
+				}
+				if zone.Responses.Response413 != nil {
+					result["responses_413"] = zone.Responses.Response413
+				}
+				if zone.Responses.Response421 != nil {
+					result["responses_421"] = zone.Responses.Response421
+				}
+				if zone.Responses.Response422 != nil {
+					result["responses_422"] = zone.Responses.Response422
+				}
+				if zone.Responses.Response423 != nil {
+					result["responses_423"] = zone.Responses.Response423
+				}
+				if zone.Responses.Response424 != nil {
+					result["responses_424"] = zone.Responses.Response424
+				}
+				if zone.Responses.Response425 != nil {
+					result["responses_425"] = zone.Responses.Response425
+				}
+				if zone.Responses.Response426 != nil {
+					result["responses_426"] = zone.Responses.Response426
+				}
+				if zone.Responses.Response428 != nil {
+					result["responses_428"] = zone.Responses.Response428
+				}
+				if zone.Responses.Response429 != nil {
+					result["responses_429"] = zone.Responses.Response429
+				}
+				if zone.Responses.Response431 != nil {
+					result["responses_431"] = zone.Responses.Response431
+				}
+				if zone.Responses.Response500 != nil {
+					result["responses_500"] = zone.Responses.Response500
+				}
+				if zone.Responses.Response501 != nil {
+					result["responses_501"] = zone.Responses.Response501
+				}
+				if zone.Responses.Response502 != nil {
+					result["responses_502"] = zone.Responses.Response502
+				}
+				if zone.Responses.Response503 != nil {
+					result["responses_503"] = zone.Responses.Response503
+				}
+				if zone.Responses.Response504 != nil {
+					result["responses_504"] = zone.Responses.Response504
+				}
+				if zone.Responses.Response505 != nil {
+					result["responses_505"] = zone.Responses.Response505
+				}
+				if zone.Responses.Response511 != nil {
+					result["responses_511"] = zone.Responses.Response511
 				}
 				return result
 			}(),
@@ -328,6 +613,19 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 	if err != nil {
 		return err
 	}
+
+	// log body for debugging
+	// var debug interface{}
+	// if err := json.Unmarshal(body, &debug); err == nil {
+	// 	if pretty, err := json.MarshalIndent(debug, "", "  "); err == nil {
+	// 		fmt.Printf("angie_api: %s response body (pretty JSON):\n%s\n", httpUpstreamsPath, string(pretty))
+	// 	} else {
+	// 		fmt.Printf("angie_api: %s response body (raw):\n%s\n", httpUpstreamsPath, string(body))
+	// 	}
+	// } else {
+	// 	// Not valid JSON — print raw bytes
+	// 	fmt.Printf("angie_api: %s response body (raw, json unmarshal failed: %v):\n%s\n", httpUpstreamsPath, err, string(body))
+	// }
 
 	var httpUpstreams httpUpstreams
 
@@ -345,13 +643,12 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 		upstreamTags["upstream"] = upstreamName
 		upstreamFields := map[string]interface{}{
 			"keepalive": upstream.Keepalive,
-			"zombies":   upstream.Zombies,
 		}
-		if upstream.Queue != nil {
-			upstreamFields["queue_size"] = upstream.Queue.Size
-			upstreamFields["queue_max_size"] = upstream.Queue.MaxSize
-			upstreamFields["queue_overflows"] = upstream.Queue.Overflows
-		}
+		// if upstream.Queue != nil {
+		// 	upstreamFields["queue_size"] = upstream.Queue.Size
+		// 	upstreamFields["queue_max_size"] = upstream.Queue.MaxSize
+		// 	upstreamFields["queue_overflows"] = upstream.Queue.Overflows
+		// }
 		acc.AddFields(
 			"angie_api_http_upstreams",
 			upstreamFields,
@@ -359,36 +656,171 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 		)
 		for _, peer := range upstream.Peers {
 			peerFields := map[string]interface{}{
-				"backup":                 peer.Backup,
-				"weight":                 peer.Weight,
-				"state":                  peer.State,
-				"active":                 peer.Active,
-				"requests":               peer.Requests,
-				"responses_1xx":          peer.Responses.Responses1xx,
-				"responses_2xx":          peer.Responses.Responses2xx,
-				"responses_3xx":          peer.Responses.Responses3xx,
-				"responses_4xx":          peer.Responses.Responses4xx,
-				"responses_5xx":          peer.Responses.Responses5xx,
-				"responses_total":        peer.Responses.Total,
-				"sent":                   peer.Sent,
-				"received":               peer.Received,
-				"fails":                  peer.Fails,
-				"unavail":                peer.Unavail,
-				"healthchecks_checks":    peer.HealthChecks.Checks,
-				"healthchecks_fails":     peer.HealthChecks.Fails,
-				"healthchecks_unhealthy": peer.HealthChecks.Unhealthy,
-				"downtime":               peer.Downtime,
-				// "selected":               peer.Selected.toInt64,
-				// "downstart":              peer.Downstart.toInt64,
+				"backup":           peer.Backup,
+				"weight":           peer.Weight,
+				"state":            peer.State,
+				"selected_current": peer.Selected.Current,
+				"selected_total":   peer.Selected.Total,
+				"sent":             peer.Data.Sent,
+				"reveived":         peer.Data.Received,
+				"health_fails":     peer.Health.Fails,
+				"health_unavaible": peer.Health.Unavaible,
+				"health_downtime":  peer.Health.Downtime,
 			}
-			if peer.HealthChecks.LastPassed != nil {
-				peerFields["healthchecks_last_passed"] = *peer.HealthChecks.LastPassed
+			// Optional selected last data field
+			if peer.Selected.Last != nil {
+				peerFields["selected_last"] = peer.Selected.Last
 			}
-			if peer.HeaderTime != nil {
-				peerFields["header_time"] = *peer.HeaderTime
+
+			// Only include codes fields that are present (and only the important ones)
+			if peer.Responses.Response100 != nil {
+				peerFields["responses_100"] = peer.Responses.Response100
 			}
-			if peer.ResponseTime != nil {
-				peerFields["response_time"] = *peer.ResponseTime
+			if peer.Responses.Response101 != nil {
+				peerFields["responses_101"] = peer.Responses.Response101
+			}
+			if peer.Responses.Response102 != nil {
+				peerFields["responses_102"] = peer.Responses.Response102
+			}
+			if peer.Responses.Response200 != nil {
+				peerFields["responses_200"] = peer.Responses.Response200
+			}
+			if peer.Responses.Response201 != nil {
+				peerFields["responses_201"] = peer.Responses.Response201
+			}
+			if peer.Responses.Response202 != nil {
+				peerFields["responses_202"] = peer.Responses.Response202
+			}
+			if peer.Responses.Response203 != nil {
+				peerFields["responses_203"] = peer.Responses.Response203
+			}
+			if peer.Responses.Response204 != nil {
+				peerFields["responses_204"] = peer.Responses.Response204
+			}
+			if peer.Responses.Response205 != nil {
+				peerFields["responses_205"] = peer.Responses.Response205
+			}
+			if peer.Responses.Response206 != nil {
+				peerFields["responses_206"] = peer.Responses.Response206
+			}
+			if peer.Responses.Response300 != nil {
+				peerFields["responses_300"] = peer.Responses.Response300
+			}
+			if peer.Responses.Response301 != nil {
+				peerFields["responses_301"] = peer.Responses.Response301
+			}
+			if peer.Responses.Response302 != nil {
+				peerFields["responses_302"] = peer.Responses.Response302
+			}
+			if peer.Responses.Response303 != nil {
+				peerFields["responses_303"] = peer.Responses.Response303
+			}
+			if peer.Responses.Response304 != nil {
+				peerFields["responses_304"] = peer.Responses.Response304
+			}
+			if peer.Responses.Response305 != nil {
+				peerFields["responses_305"] = peer.Responses.Response305
+			}
+			if peer.Responses.Response307 != nil {
+				peerFields["responses_307"] = peer.Responses.Response307
+			}
+			if peer.Responses.Response308 != nil {
+				peerFields["responses_308"] = peer.Responses.Response308
+			}
+			if peer.Responses.Response400 != nil {
+				peerFields["responses_400"] = peer.Responses.Response400
+			}
+			if peer.Responses.Response401 != nil {
+				peerFields["responses_401"] = peer.Responses.Response401
+			}
+			if peer.Responses.Response402 != nil {
+				peerFields["responses_402"] = peer.Responses.Response402
+			}
+			if peer.Responses.Response403 != nil {
+				peerFields["responses_403"] = peer.Responses.Response403
+			}
+			if peer.Responses.Response404 != nil {
+				peerFields["responses_404"] = peer.Responses.Response404
+			}
+			if peer.Responses.Response405 != nil {
+				peerFields["responses_405"] = peer.Responses.Response405
+			}
+			if peer.Responses.Response406 != nil {
+				peerFields["responses_406"] = peer.Responses.Response406
+			}
+			if peer.Responses.Response407 != nil {
+				peerFields["responses_407"] = peer.Responses.Response407
+			}
+			if peer.Responses.Response408 != nil {
+				peerFields["responses_408"] = peer.Responses.Response408
+			}
+			if peer.Responses.Response409 != nil {
+				peerFields["responses_409"] = peer.Responses.Response409
+			}
+			if peer.Responses.Response410 != nil {
+				peerFields["responses_410"] = peer.Responses.Response410
+			}
+			if peer.Responses.Response411 != nil {
+				peerFields["responses_411"] = peer.Responses.Response411
+			}
+			if peer.Responses.Response412 != nil {
+				peerFields["responses_412"] = peer.Responses.Response412
+			}
+			if peer.Responses.Response413 != nil {
+				peerFields["responses_413"] = peer.Responses.Response413
+			}
+			if peer.Responses.Response421 != nil {
+				peerFields["responses_421"] = peer.Responses.Response421
+			}
+			if peer.Responses.Response422 != nil {
+				peerFields["responses_422"] = peer.Responses.Response422
+			}
+			if peer.Responses.Response423 != nil {
+				peerFields["responses_423"] = peer.Responses.Response423
+			}
+			if peer.Responses.Response424 != nil {
+				peerFields["responses_424"] = peer.Responses.Response424
+			}
+			if peer.Responses.Response425 != nil {
+				peerFields["responses_425"] = peer.Responses.Response425
+			}
+			if peer.Responses.Response426 != nil {
+				peerFields["responses_426"] = peer.Responses.Response426
+			}
+			if peer.Responses.Response428 != nil {
+				peerFields["responses_428"] = peer.Responses.Response428
+			}
+			if peer.Responses.Response429 != nil {
+				peerFields["responses_429"] = peer.Responses.Response429
+			}
+			if peer.Responses.Response431 != nil {
+				peerFields["responses_431"] = peer.Responses.Response431
+			}
+			if peer.Responses.Response500 != nil {
+				peerFields["responses_500"] = peer.Responses.Response500
+			}
+			if peer.Responses.Response501 != nil {
+				peerFields["responses_501"] = peer.Responses.Response501
+			}
+			if peer.Responses.Response502 != nil {
+				peerFields["responses_502"] = peer.Responses.Response502
+			}
+			if peer.Responses.Response503 != nil {
+				peerFields["responses_503"] = peer.Responses.Response503
+			}
+			if peer.Responses.Response504 != nil {
+				peerFields["responses_504"] = peer.Responses.Response504
+			}
+			if peer.Responses.Response505 != nil {
+				peerFields["responses_505"] = peer.Responses.Response505
+			}
+			if peer.Responses.Response511 != nil {
+				peerFields["responses_511"] = peer.Responses.Response511
+			}
+
+			// Other optional fields
+			if peer.Service != nil {
+				peerFields["service"] = *peer.Service
 			}
 			if peer.MaxConns != nil {
 				peerFields["max_conns"] = *peer.MaxConns
@@ -398,9 +830,7 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 				peerTags[k] = v
 			}
 			peerTags["upstream_address"] = peer.Server
-			if peer.ID != nil {
-				peerTags["id"] = strconv.Itoa(*peer.ID)
-			}
+			peerTags["sid"] = peer.SID
 			acc.AddFields("angie_api_http_upstream_peers", peerFields, peerTags)
 		}
 	}
@@ -461,6 +891,7 @@ func (n *AngieAPI) gatherHTTPCachesMetrics(addr *url.URL, acc telegraf.Accumulat
 	return nil
 }
 
+// Not used (yet)
 func (n *AngieAPI) gatherStreamServerZonesMetrics(addr *url.URL, acc telegraf.Accumulator) error {
 	body, err := n.gatherURL(addr, streamServerZonesPath)
 	if err != nil {
@@ -539,74 +970,75 @@ func (n *AngieAPI) gatherResolverZonesMetrics(addr *url.URL, acc telegraf.Accumu
 	return nil
 }
 
-func (n *AngieAPI) gatherStreamUpstreamsMetrics(addr *url.URL, acc telegraf.Accumulator) error {
-	body, err := n.gatherURL(addr, streamUpstreamsPath)
-	if err != nil {
-		return err
-	}
+// Not used (yet)
+// func (n *AngieAPI) gatherStreamUpstreamsMetrics(addr *url.URL, acc telegraf.Accumulator) error {
+// 	body, err := n.gatherURL(addr, streamUpstreamsPath)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	var streamUpstreams streamUpstreams
+// 	var streamUpstreams streamUpstreams
 
-	if err := json.Unmarshal(body, &streamUpstreams); err != nil {
-		return err
-	}
+// 	if err := json.Unmarshal(body, &streamUpstreams); err != nil {
+// 		return err
+// 	}
 
-	tags := getTags(addr)
+// 	tags := getTags(addr)
 
-	for upstreamName, upstream := range streamUpstreams {
-		upstreamTags := make(map[string]string, len(tags)+1)
-		for k, v := range tags {
-			upstreamTags[k] = v
-		}
-		upstreamTags["upstream"] = upstreamName
-		acc.AddFields(
-			"angie_api_stream_upstreams",
-			map[string]interface{}{
-				"zombies": upstream.Zombies,
-			},
-			upstreamTags,
-		)
-		for _, peer := range upstream.Peers {
-			peerFields := map[string]interface{}{
-				"backup":                 peer.Backup,
-				"weight":                 peer.Weight,
-				"state":                  peer.State,
-				"active":                 peer.Active,
-				"connections":            peer.Connections,
-				"sent":                   peer.Sent,
-				"received":               peer.Received,
-				"fails":                  peer.Fails,
-				"unavail":                peer.Unavail,
-				"healthchecks_checks":    peer.HealthChecks.Checks,
-				"healthchecks_fails":     peer.HealthChecks.Fails,
-				"healthchecks_unhealthy": peer.HealthChecks.Unhealthy,
-				"downtime":               peer.Downtime,
-			}
-			if peer.HealthChecks.LastPassed != nil {
-				peerFields["healthchecks_last_passed"] = *peer.HealthChecks.LastPassed
-			}
-			if peer.ConnectTime != nil {
-				peerFields["connect_time"] = *peer.ConnectTime
-			}
-			if peer.FirstByteTime != nil {
-				peerFields["first_byte_time"] = *peer.FirstByteTime
-			}
-			if peer.ResponseTime != nil {
-				peerFields["response_time"] = *peer.ResponseTime
-			}
-			peerTags := make(map[string]string, len(upstreamTags)+2)
-			for k, v := range upstreamTags {
-				peerTags[k] = v
-			}
-			peerTags["upstream_address"] = peer.Server
-			peerTags["id"] = strconv.Itoa(peer.ID)
+// 	for upstreamName, upstream := range streamUpstreams {
+// 		upstreamTags := make(map[string]string, len(tags)+1)
+// 		for k, v := range tags {
+// 			upstreamTags[k] = v
+// 		}
+// 		upstreamTags["upstream"] = upstreamName
+// 		acc.AddFields(
+// 			"angie_api_stream_upstreams",
+// 			map[string]interface{}{
+// 				"zombies": upstream.Zombies,
+// 			},
+// 			upstreamTags,
+// 		)
+// 		for _, peer := range upstream.Peers {
+// 			peerFields := map[string]interface{}{
+// 				"backup":                 peer.Backup,
+// 				"weight":                 peer.Weight,
+// 				"state":                  peer.State,
+// 				"active":                 peer.Active,
+// 				"connections":            peer.Connections,
+// 				"sent":                   peer.Sent,
+// 				"received":               peer.Received,
+// 				"fails":                  peer.Fails,
+// 				"unavail":                peer.Unavail,
+// 				"healthchecks_checks":    peer.HealthChecks.Checks,
+// 				"healthchecks_fails":     peer.HealthChecks.Fails,
+// 				"healthchecks_unhealthy": peer.HealthChecks.Unhealthy,
+// 				"downtime":               peer.Downtime,
+// 			}
+// 			if peer.HealthChecks.LastPassed != nil {
+// 				peerFields["healthchecks_last_passed"] = *peer.HealthChecks.LastPassed
+// 			}
+// 			if peer.ConnectTime != nil {
+// 				peerFields["connect_time"] = *peer.ConnectTime
+// 			}
+// 			if peer.FirstByteTime != nil {
+// 				peerFields["first_byte_time"] = *peer.FirstByteTime
+// 			}
+// 			if peer.ResponseTime != nil {
+// 				peerFields["response_time"] = *peer.ResponseTime
+// 			}
+// 			peerTags := make(map[string]string, len(upstreamTags)+2)
+// 			for k, v := range upstreamTags {
+// 				peerTags[k] = v
+// 			}
+// 			peerTags["upstream_address"] = peer.Server
+// 			peerTags["id"] = strconv.Itoa(peer.ID)
 
-			acc.AddFields("angie_api_stream_upstream_peers", peerFields, peerTags)
-		}
-	}
+// 			acc.AddFields("angie_api_stream_upstream_peers", peerFields, peerTags)
+// 		}
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
 
 func (n *AngieAPI) gatherHTTPLimitReqsMetrics(addr *url.URL, acc telegraf.Accumulator) error {
 	body, err := n.gatherURL(addr, httpLimitReqsPath)

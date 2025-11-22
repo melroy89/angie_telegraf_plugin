@@ -57,11 +57,21 @@ See the [CONFIGURATION.md](https://github.com/influxdata/telegraf/blob/master/do
 
 ## Developers
 
-For developers (thank you for contributing), you can use to build + run (it will use the `example.conf` file):
+For developers (thank you for contributing), first make a copy of the `example.conf` and call it `dev.conf`:
+
+```sh
+cp example.conf dev.conf
+```
+
+Make any changes to the configuration if you wish.
+
+Finally, you can use following command to build + run (it will use the `dev.conf` file in the root of directory of this project):
 
 ```sh
 make rundev
 ```
+
+(Press enter to trigger a fetch).
 
 ## Measurements by API version
 

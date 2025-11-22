@@ -654,7 +654,7 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 			upstreamFields,
 			upstreamTags,
 		)
-		for _, peer := range upstream.Peers {
+		for peerName, peer := range upstream.Peers {
 			peerFields := map[string]interface{}{
 				"backup":           peer.Backup,
 				"weight":           peer.Weight,
@@ -825,11 +825,11 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 			if peer.MaxConns != nil {
 				peerFields["max_conns"] = *peer.MaxConns
 			}
-			peerTags := make(map[string]string, len(upstreamTags)+2)
+			peerTags := make(map[string]string, len(upstreamTags)+3)
 			for k, v := range upstreamTags {
 				peerTags[k] = v
 			}
-			peerTags["upstream_address"] = peer.Server
+			peerTags["peer"] = peerName
 			peerTags["sid"] = peer.SID
 			acc.AddFields("angie_api_http_upstream_peers", peerFields, peerTags)
 		}

@@ -157,16 +157,8 @@ type data struct {
 	Received int64 `json:"received"`
 }
 
-// Instead of using  "peers": [{...} ]
-// In Angie the peers are in a map with the server as key, like:
-// "peers": {
-//    "server1:80": {...},
-//    "server2:80": {...}
-// }
-
 type httpUpstreams map[string]struct {
-	Peers []struct {
-		Server    string           `json:"server"`
+	Peers map[string]struct {
 		Service   *string          `json:"service"`
 		Backup    bool             `json:"backup"`
 		Weight    int              `json:"weight"`

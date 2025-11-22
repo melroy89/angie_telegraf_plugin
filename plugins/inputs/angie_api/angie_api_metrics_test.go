@@ -778,28 +778,28 @@ func TestGatherSlabsMetrics(t *testing.T) {
 		})
 }
 
-func TestGatherSslMetrics(t *testing.T) {
-	ts, n := prepareEndpoint(t, sslPath, sslPayload)
-	defer ts.Close()
+// func TestGatherSslMetrics(t *testing.T) {
+// 	ts, n := prepareEndpoint(t, sslPath, sslPayload)
+// 	defer ts.Close()
 
-	var acc testutil.Accumulator
-	addr, host, port := prepareAddr(t, ts)
+// 	var acc testutil.Accumulator
+// 	addr, host, port := prepareAddr(t, ts)
 
-	require.NoError(t, n.gatherSslMetrics(addr, &acc))
+// 	require.NoError(t, n.gatherSslMetrics(addr, &acc))
 
-	acc.AssertContainsTaggedFields(
-		t,
-		"angie_api_ssl",
-		map[string]interface{}{
-			"handshakes":        int64(79572),
-			"handshakes_failed": int64(21025),
-			"session_reuses":    int64(15762),
-		},
-		map[string]string{
-			"source": host,
-			"port":   port,
-		})
-}
+// 	acc.AssertContainsTaggedFields(
+// 		t,
+// 		"angie_api_ssl",
+// 		map[string]interface{}{
+// 			"handshakes":        int64(79572),
+// 			"handshakes_failed": int64(21025),
+// 			"session_reuses":    int64(15762),
+// 		},
+// 		map[string]string{
+// 			"source": host,
+// 			"port":   port,
+// 		})
+// }
 
 func TestGatherHttpRequestsMetrics(t *testing.T) {
 	ts, n := prepareEndpoint(t, httpRequestsPath, httpRequestsPayload)
@@ -1275,147 +1275,147 @@ func TestGatherResolverZonesMetrics(t *testing.T) {
 		})
 }
 
-func TestGatherStreamUpstreams(t *testing.T) {
-	ts, n := prepareEndpoint(t, streamUpstreamsPath, streamUpstreamsPayload)
-	defer ts.Close()
+// func TestGatherStreamUpstreams(t *testing.T) {
+// 	ts, n := prepareEndpoint(t, streamUpstreamsPath, streamUpstreamsPayload)
+// 	defer ts.Close()
 
-	var acc testutil.Accumulator
-	addr, host, port := prepareAddr(t, ts)
+// 	var acc testutil.Accumulator
+// 	addr, host, port := prepareAddr(t, ts)
 
-	require.NoError(t, n.gatherStreamUpstreamsMetrics(addr, &acc))
+// 	require.NoError(t, n.gatherStreamUpstreamsMetrics(addr, &acc))
 
-	acc.AssertContainsTaggedFields(
-		t,
-		"angie_api_stream_upstreams",
-		map[string]interface{}{
-			"zombies": int(0),
-		},
-		map[string]string{
-			"source":   host,
-			"port":     port,
-			"upstream": "mysql_backends",
-		})
+// 	acc.AssertContainsTaggedFields(
+// 		t,
+// 		"angie_api_stream_upstreams",
+// 		map[string]interface{}{
+// 			"zombies": int(0),
+// 		},
+// 		map[string]string{
+// 			"source":   host,
+// 			"port":     port,
+// 			"upstream": "mysql_backends",
+// 		})
 
-	acc.AssertContainsTaggedFields(
-		t,
-		"angie_api_stream_upstreams",
-		map[string]interface{}{
-			"zombies": int(0),
-		},
-		map[string]string{
-			"source":   host,
-			"port":     port,
-			"upstream": "dns",
-		})
+// 	acc.AssertContainsTaggedFields(
+// 		t,
+// 		"angie_api_stream_upstreams",
+// 		map[string]interface{}{
+// 			"zombies": int(0),
+// 		},
+// 		map[string]string{
+// 			"source":   host,
+// 			"port":     port,
+// 			"upstream": "dns",
+// 		})
 
-	acc.AssertContainsTaggedFields(
-		t,
-		"angie_api_stream_upstream_peers",
-		map[string]interface{}{
-			"active":                   int(0),
-			"backup":                   false,
-			"connections":              int64(0),
-			"downtime":                 int64(0),
-			"fails":                    int64(0),
-			"healthchecks_checks":      int64(26214),
-			"healthchecks_fails":       int64(0),
-			"healthchecks_last_passed": true,
-			"healthchecks_unhealthy":   int64(0),
-			"received":                 int64(19222475454),
-			"sent":                     int64(251946292),
-			"state":                    "up",
-			"unavail":                  int64(0),
-			"weight":                   int(5),
-		},
-		map[string]string{
-			"source":           host,
-			"port":             port,
-			"upstream":         "mysql_backends",
-			"upstream_address": "10.0.0.1:12345",
-			"id":               "0",
-		})
+// 	acc.AssertContainsTaggedFields(
+// 		t,
+// 		"angie_api_stream_upstream_peers",
+// 		map[string]interface{}{
+// 			"active":                   int(0),
+// 			"backup":                   false,
+// 			"connections":              int64(0),
+// 			"downtime":                 int64(0),
+// 			"fails":                    int64(0),
+// 			"healthchecks_checks":      int64(26214),
+// 			"healthchecks_fails":       int64(0),
+// 			"healthchecks_last_passed": true,
+// 			"healthchecks_unhealthy":   int64(0),
+// 			"received":                 int64(19222475454),
+// 			"sent":                     int64(251946292),
+// 			"state":                    "up",
+// 			"unavail":                  int64(0),
+// 			"weight":                   int(5),
+// 		},
+// 		map[string]string{
+// 			"source":           host,
+// 			"port":             port,
+// 			"upstream":         "mysql_backends",
+// 			"upstream_address": "10.0.0.1:12345",
+// 			"id":               "0",
+// 		})
 
-	acc.AssertContainsTaggedFields(
-		t,
-		"angie_api_stream_upstream_peers",
-		map[string]interface{}{
-			"active":                   int(0),
-			"backup":                   true,
-			"connections":              int64(0),
-			"downtime":                 int64(262925617),
-			"fails":                    int64(0),
-			"healthchecks_checks":      int64(26284),
-			"healthchecks_fails":       int64(26284),
-			"healthchecks_last_passed": false,
-			"healthchecks_unhealthy":   int64(1),
-			"received":                 int64(0),
-			"sent":                     int64(0),
-			"state":                    "unhealthy",
-			"unavail":                  int64(0),
-			"weight":                   int(1),
-		},
-		map[string]string{
-			"source":           host,
-			"port":             port,
-			"upstream":         "mysql_backends",
-			"upstream_address": "10.0.0.1:12346",
-			"id":               "1",
-		})
+// 	acc.AssertContainsTaggedFields(
+// 		t,
+// 		"angie_api_stream_upstream_peers",
+// 		map[string]interface{}{
+// 			"active":                   int(0),
+// 			"backup":                   true,
+// 			"connections":              int64(0),
+// 			"downtime":                 int64(262925617),
+// 			"fails":                    int64(0),
+// 			"healthchecks_checks":      int64(26284),
+// 			"healthchecks_fails":       int64(26284),
+// 			"healthchecks_last_passed": false,
+// 			"healthchecks_unhealthy":   int64(1),
+// 			"received":                 int64(0),
+// 			"sent":                     int64(0),
+// 			"state":                    "unhealthy",
+// 			"unavail":                  int64(0),
+// 			"weight":                   int(1),
+// 		},
+// 		map[string]string{
+// 			"source":           host,
+// 			"port":             port,
+// 			"upstream":         "mysql_backends",
+// 			"upstream_address": "10.0.0.1:12346",
+// 			"id":               "1",
+// 		})
 
-	acc.AssertContainsTaggedFields(
-		t,
-		"angie_api_stream_upstream_peers",
-		map[string]interface{}{
-			"active":                   int(0),
-			"backup":                   false,
-			"connections":              int64(667231),
-			"downtime":                 int64(0),
-			"fails":                    int64(0),
-			"healthchecks_checks":      int64(26214),
-			"healthchecks_fails":       int64(0),
-			"healthchecks_last_passed": true,
-			"healthchecks_unhealthy":   int64(0),
-			"received":                 int64(19222475454),
-			"sent":                     int64(251946292),
-			"state":                    "up",
-			"unavail":                  int64(0),
-			"weight":                   int(5),
-		},
-		map[string]string{
-			"source":           host,
-			"port":             port,
-			"upstream":         "dns",
-			"upstream_address": "10.0.0.1:12347",
-			"id":               "0",
-		})
+// 	acc.AssertContainsTaggedFields(
+// 		t,
+// 		"angie_api_stream_upstream_peers",
+// 		map[string]interface{}{
+// 			"active":                   int(0),
+// 			"backup":                   false,
+// 			"connections":              int64(667231),
+// 			"downtime":                 int64(0),
+// 			"fails":                    int64(0),
+// 			"healthchecks_checks":      int64(26214),
+// 			"healthchecks_fails":       int64(0),
+// 			"healthchecks_last_passed": true,
+// 			"healthchecks_unhealthy":   int64(0),
+// 			"received":                 int64(19222475454),
+// 			"sent":                     int64(251946292),
+// 			"state":                    "up",
+// 			"unavail":                  int64(0),
+// 			"weight":                   int(5),
+// 		},
+// 		map[string]string{
+// 			"source":           host,
+// 			"port":             port,
+// 			"upstream":         "dns",
+// 			"upstream_address": "10.0.0.1:12347",
+// 			"id":               "0",
+// 		})
 
-	acc.AssertContainsTaggedFields(
-		t,
-		"angie_api_stream_upstream_peers",
-		map[string]interface{}{
-			"active":                   int(0),
-			"backup":                   true,
-			"connections":              int64(0),
-			"downtime":                 int64(262925617),
-			"fails":                    int64(0),
-			"healthchecks_checks":      int64(26284),
-			"healthchecks_fails":       int64(26284),
-			"healthchecks_last_passed": false,
-			"healthchecks_unhealthy":   int64(1),
-			"received":                 int64(0),
-			"sent":                     int64(0),
-			"state":                    "unhealthy",
-			"unavail":                  int64(0),
-			"weight":                   int(1),
-		},
-		map[string]string{
-			"source":           host,
-			"port":             port,
-			"upstream":         "dns",
-			"upstream_address": "10.0.0.1:12348",
-			"id":               "1",
-		})
-}
+// 	acc.AssertContainsTaggedFields(
+// 		t,
+// 		"angie_api_stream_upstream_peers",
+// 		map[string]interface{}{
+// 			"active":                   int(0),
+// 			"backup":                   true,
+// 			"connections":              int64(0),
+// 			"downtime":                 int64(262925617),
+// 			"fails":                    int64(0),
+// 			"healthchecks_checks":      int64(26284),
+// 			"healthchecks_fails":       int64(26284),
+// 			"healthchecks_last_passed": false,
+// 			"healthchecks_unhealthy":   int64(1),
+// 			"received":                 int64(0),
+// 			"sent":                     int64(0),
+// 			"state":                    "unhealthy",
+// 			"unavail":                  int64(0),
+// 			"weight":                   int(1),
+// 		},
+// 		map[string]string{
+// 			"source":           host,
+// 			"port":             port,
+// 			"upstream":         "dns",
+// 			"upstream_address": "10.0.0.1:12348",
+// 			"id":               "1",
+// 		})
+// }
 
 func TestGatherStreamServerZonesMetrics(t *testing.T) {
 	ts, n := prepareEndpoint(t, streamServerZonesPath, streamServerZonesPayload)

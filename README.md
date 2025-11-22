@@ -17,15 +17,23 @@ Requirements:
 
 - **Golang**: tested on version `go1.25.0 linux/amd64`
 
-This plugin can be used an an external plugin to Telegraf. But therefore you will first need to compile it using Go:
+This plugin can be used an an external plugin to Telegraf. 
 
+1. First clone and build the project:
 ```sh
 $ git clone https://github.com/melroy89/angie_telegraf_plugin.git
 $ cd angie_telegraf_plugin
 $ make build
 ```
+2. The standalone binary should be available in the root directory: `./angie_telegraf`
+3. Copy both the binary at some location together with your `plugin.conf` file. If needed make changes to your configuration.
+3. Add the plugin to your `telegraf.conf` file: 
 
-The standalone binary should be available at: `bin/angie_telegraf_plugin`
+```ini
+[[inputs.execd]]
+  command = ["/path/to/angie_telegraf", "-config", "/path/to/plugin.conf"]
+  signal = "none"
+```
 
 ## Global configuration options
 
@@ -36,8 +44,8 @@ See the [CONFIGURATION.md](https://github.com/influxdata/telegraf/blob/master/do
 
 ## Configuration
 
-```toml @example.conf
-# Read Angie API advanced status information
+```toml @plugin.conf
+# Read Angie API status information
 [[inputs.angie_api]]
   ## An array of Angie API URIs to gather stats.
   urls = ["http://localhost/status"]
@@ -57,10 +65,10 @@ See the [CONFIGURATION.md](https://github.com/influxdata/telegraf/blob/master/do
 
 ## Developers
 
-For developers (thank you for contributing), first make a copy of the `example.conf` and call it `dev.conf`:
+For developers (thank you for contributing), first make a copy of the `plugin.conf` and call it `dev.conf`:
 
 ```sh
-cp example.conf dev.conf
+cp plugin.conf dev.conf
 ```
 
 Make any changes to the configuration if you wish.

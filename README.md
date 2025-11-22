@@ -157,8 +157,6 @@ make rundev
   - bypass_bytes
   - bypass_responses_written
   - bypass_bytes_written
-- angie_api_stream_upstreams
-  - zombies
 - angie_api_http_location_zones
   - total
   - processing
@@ -188,18 +186,17 @@ make rundev
 
 ### Tags
 
-- angie_api_processes, angie_api_connections, angie_api_ssl, angie_api_http_requests
+- angie_api_connections, angie_api_http_requests
   - source
   - port
 
-- angie_api_http_upstreams, angie_api_stream_upstreams
+- angie_api_http_upstreams
   - upstream
   - source
   - port
 
-- angie_api_http_server_zones, angie_api_upstream_server_zones,
-  angie_api_http_location_zones, angie_api_resolver_zones,
-  angie_api_slabs_pages
+- angie_api_http_server_zones, angie_api_http_location_zones, 
+  angie_api_resolver_zones, angie_api_slabs_pages
   - source
   - port
   - zone
@@ -209,13 +206,6 @@ make rundev
   - port
   - zone
   - slot
-
-- angie_api_upstream_peers
-  - id
-  - upstream
-  - source
-  - port
-  - upstream_address
 
 - angie_api_http_caches
   - source

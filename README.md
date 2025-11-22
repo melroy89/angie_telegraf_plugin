@@ -238,7 +238,7 @@ telegraf --config telegraf.conf --input-filter angie_api --test
 
 *Note:* Use `--sample-config` if you wish to use the included example configuration instead.
 
-It produces:
+It produces (example output):
 
 ```text
 angie_api_connections,port=80,source=angie.host.tld accepted=11614i,dropped=0i,active=22i,idle=84i 1763846935468587626
@@ -248,15 +248,15 @@ angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=upstream used=
 angie_api_slabs_slots,port=80,slot=512,source=angie.host.tld,zone=upstream used=1i,free=7i,reqs=1i,fails=0i 1763846935469326477
 angie_api_slabs_slots,port=80,slot=8,source=angie.host.tld,zone=upstream fails=0i,used=2i,free=502i,reqs=2i 1763846935469328360
 angie_api_slabs_slots,port=80,slot=16,source=angie.host.tld,zone=upstream reqs=2i,fails=0i,used=2i,free=252i 1763846935469329692
-angie_api_slabs_pages,port=80,source=angie.host.tld,zone=mbin_limit used=2i,free=2542i 1763846935469344414
-angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=mbin_limit used=1i,free=126i,reqs=1i,fails=0i 1763846935469345846
-angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=mbin_limit used=14i,free=18i,reqs=1233i,fails=0i 1763846935469347439
-angie_api_slabs_pages,port=80,source=angie.host.tld,zone=mercure used=6i,free=248i 1763846935469365045
-angie_api_slabs_slots,port=80,slot=512,source=angie.host.tld,zone=mercure free=7i,reqs=1i,fails=0i,used=1i 1763846935469367749
-angie_api_slabs_slots,port=80,slot=8,source=angie.host.tld,zone=mercure used=2i,free=502i,reqs=2i,fails=0i 1763846935469369702
-angie_api_slabs_slots,port=80,slot=16,source=angie.host.tld,zone=mercure used=2i,free=252i,reqs=2i,fails=0i 1763846935469385416
-angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=mercure fails=0i,used=2i,free=125i,reqs=2i 1763846935469387218
-angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=mercure free=28i,reqs=4i,fails=0i,used=4i 1763846935469388961
+angie_api_slabs_pages,port=80,source=angie.host.tld,zone=domain_limit used=2i,free=2542i 1763846935469344414
+angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=domain_limit used=1i,free=126i,reqs=1i,fails=0i 1763846935469345846
+angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=domain_limit used=14i,free=18i,reqs=1233i,fails=0i 1763846935469347439
+angie_api_slabs_pages,port=80,source=angie.host.tld,zone=another_zone used=6i,free=248i 1763846935469365045
+angie_api_slabs_slots,port=80,slot=512,source=angie.host.tld,zone=another_zone free=7i,reqs=1i,fails=0i,used=1i 1763846935469367749
+angie_api_slabs_slots,port=80,slot=8,source=angie.host.tld,zone=another_zone used=2i,free=502i,reqs=2i,fails=0i 1763846935469369702
+angie_api_slabs_slots,port=80,slot=16,source=angie.host.tld,zone=another_zone used=2i,free=252i,reqs=2i,fails=0i 1763846935469385416
+angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=another_zone fails=0i,used=2i,free=125i,reqs=2i 1763846935469387218
+angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=another_zone free=28i,reqs=4i,fails=0i,used=4i 1763846935469388961
 angie_api_slabs_pages,port=80,source=angie.host.tld,zone=CACHE used=16i,free=2528i 1763846935469407349
 angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=CACHE used=1i,free=126i,reqs=1i,fails=0i 1763846935469408951
 angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=CACHE fails=0i,used=437i,free=11i,reqs=468i 1763846935469410203
@@ -264,9 +264,6 @@ angie_api_slabs_slots,port=80,slot=512,source=angie.host.tld,zone=CACHE fails=0i
 angie_api_slabs_pages,port=80,source=angie.host.tld,zone=ip used=2i,free=2542i 1763846935469423833
 angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=ip free=126i,reqs=1i,fails=0i,used=1i 1763846935469425636
 angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=ip free=12i,reqs=1602i,fails=0i,used=20i 1763846935469448551
-angie_api_slabs_pages,port=80,source=angie.host.tld,zone=matrix_limit free=2542i,used=2i 1763846935469457985
-angie_api_slabs_slots,port=80,slot=64,source=angie.host.tld,zone=matrix_limit free=63i,reqs=1i,fails=0i,used=1i 1763846935469461240
-angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=matrix_limit used=11i,free=21i,reqs=1209i,fails=0i 1763846935469500429
 angie_api_slabs_pages,port=80,source=angie.host.tld,zone=addr used=2i,free=2542i 1763846935469505316
 angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=addr fails=0i,used=1i,free=31i,reqs=1i 1763846935469506928
 angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=addr used=1i,free=126i,reqs=1i,fails=0i 1763846935469526528
@@ -278,10 +275,10 @@ angie_api_slabs_slots,port=80,slot=256,source=angie.host.tld,zone=SSL fails=0i,u
 angie_api_slabs_slots,port=80,slot=512,source=angie.host.tld,zone=SSL used=1i,free=7i,reqs=1i,fails=0i 1763846935469558156
 angie_api_http_server_zones,port=80,source=angie.host.tld,zone=server_zone processing=0i,sent=0i,ssl_reuses=0i,ssl_timedout=0i,discarded=0i,received=0i,ssl_handhaked=0i,ssl_failed=0i,total=0i 1763846935470146020
 angie_api_http_server_zones,port=80,source=angie.host.tld,zone=example.zone.tld total=849i,processing=17i,discarded=0i,sent=14214953i,responses_101=54i,responses_200=639i,responses_304=139i,ssl_handhaked=664i,received=267614i,ssl_reuses=424i,ssl_timedout=0i,ssl_failed=0i 1763846935470152089
-angie_api_http_upstreams,port=80,source=angie.host.tld,upstream=mercure keepalive=0i 1763846935470758731
-angie_api_http_upstream_peers,peer=127.0.0.1:3005,port=80,sid=0349acf60535cd8bdf89fb53de0f959e,source=angie.host.tld,upstream=mercure state="up",sent=0i,weight=1i,selected_current=0i,selected_total=0i,reveived=0i,health_fails=0i,health_unavaible=0i,health_downtime=0i,backup=false 1763846935470766403
-angie_api_http_upstreams,port=80,source=angie.host.tld,upstream=explorer keepalive=0i 1763846935470769057
-angie_api_http_upstream_peers,peer=127.0.0.1:8999,port=80,sid=adbdc4c737eef0c63976e2f697c8c8b3,source=angie.host.tld,upstream=explorer backup=false,weight=1i,selected_total=674i,sent=398003i,reveived=14527538i,health_fails=0i,selected_last="2025-11-22T21:28:00Z",responses_200=557i,state="up",selected_current=17i,health_unavaible=0i,health_downtime=0i,responses_101=54i,responses_304=46i 1763846935470800063
+angie_api_http_upstreams,port=80,source=angie.host.tld,upstream=some_upstream_name keepalive=0i 1763846935470758731
+angie_api_http_upstream_peers,peer=127.0.0.1:3005,port=80,sid=0349acf60535cd8bdf89fb53de0f959e,source=angie.host.tld,upstream=some_upstream_name state="up",sent=0i,weight=1i,selected_current=0i,selected_total=0i,reveived=0i,health_fails=0i,health_unavaible=0i,health_downtime=0i,backup=false 1763846935470766403
+angie_api_http_upstreams,port=80,source=angie.host.tld,upstream=another_upstream keepalive=0i 1763846935470769057
+angie_api_http_upstream_peers,peer=127.0.0.1:8999,port=80,sid=adbdc4c737eef0c63976e2f697c8c8b3,source=angie.host.tld,upstream=another_upstream backup=false,weight=1i,selected_total=674i,sent=398003i,reveived=14527538i,health_fails=0i,selected_last="2025-11-22T21:28:00Z",responses_200=557i,state="up",selected_current=17i,health_unavaible=0i,health_downtime=0i,responses_101=54i,responses_304=46i 1763846935470800063
 angie_api_http_caches,cache=CACHE,port=80,source=angie.host.tld miss_responses=67i,miss_bytes_written=834493i,expired_bytes_written=1351616i,bypass_bytes=0i,bypass_bytes_written=0i,cold=false,stale_responses=0i,stale_bytes=0i,bypass_responses=0i,bypass_responses_written=0i,updating_responses=0i,updating_bytes=0i,miss_responses_written=36i,expired_responses=89i,max_size=1073741824i,revalidated_responses=0i,revalidated_bytes=0i,miss_bytes=843208i,expired_bytes=1351616i,expired_responses_written=89i,size=7794688i,hit_responses=64i,hit_bytes=421058i 1763846935471333465
 angie_api_resolver_zones,port=80,source=angie.host.tld,zone=resolver_zone servfail=0i,nxdomain=0i,timedout=0i,name=0i,formerr=0i,notimp=0i,refused=0i,unknown=0i,srv=0i,addr=0i,noerror=0i 1763846935472157204
 angie_api_http_limit_reqs,limit=ip,port=80,source=angie.host.tld passed=9223i,delayed=1i,rejected=0i,delayed_dry_run=0i,rejected_dry_run=0i 1763846935472578227

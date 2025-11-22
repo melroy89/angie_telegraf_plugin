@@ -18,5 +18,5 @@ restart:
 	sudo systemctl restart telegraf
 
 rundev: build
-	./bin/angie_telegraf_plugin -config ./bin/angie_telegraf_plugin.conf
+	./bin/angie_telegraf_plugin -config ./example.conf
 

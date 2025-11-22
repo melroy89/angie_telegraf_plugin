@@ -17,10 +17,15 @@ Requirements:
 
 - **Golang**: tested on version `go1.25.0 linux/amd64`
 
-Steps:
-- Run `make build`
-- The binary should be available inside `bin/angie_telegraf_plugin`
+This plugin can be used an an external plugin to Telegraf. But therefore you will first need to compile it using Go:
 
+```sh
+$ git clone https://github.com/melroy89/angie_telegraf_plugin.git
+$ cd angie_telegraf_plugin
+$ make build
+```
+
+The standalone binary should be available at: `bin/angie_telegraf_plugin`
 
 ## Global configuration options
 

@@ -24,7 +24,7 @@ type slabs map[string]struct {
 	} `json:"slots"`
 }
 
-type ssl struct { // added in version 6
+type ssl struct {
 	Handshakes       int64 `json:"handshakes"`
 	HandshakesFailed int64 `json:"handshakes_failed"`
 	SessionReuses    int64 `json:"session_reuses"`
@@ -66,7 +66,7 @@ type httpServerZones map[string]struct {
 	Processing int           `json:"processing"`
 	Requests   int64         `json:"requests"`
 	Responses  responseStats `json:"responses"`
-	Discarded  *int64        `json:"discarded"` // added in version 6
+	Discarded  *int64        `json:"discarded"`
 	Received   int64         `json:"received"`
 	Sent       int64         `json:"sent"`
 }
@@ -74,7 +74,7 @@ type httpServerZones map[string]struct {
 type httpLocationZones map[string]struct {
 	Requests  int64         `json:"requests"`
 	Responses responseStats `json:"responses"`
-	Discarded *int64        `json:"discarded"` // added in version 6
+	Discarded *int64        `json:"discarded"`
 	Received  int64         `json:"received"`
 	Sent      int64         `json:"sent"`
 }
@@ -88,14 +88,14 @@ type healthCheckStats struct {
 
 type httpUpstreams map[string]struct {
 	Peers []struct {
-		ID           *int             `json:"id"` // added in version 3
+		ID           *int             `json:"id"`
 		Server       string           `json:"server"`
 		Backup       bool             `json:"backup"`
 		Weight       int              `json:"weight"`
 		State        string           `json:"state"`
 		Active       int              `json:"active"`
 		Keepalive    *int             `json:"keepalive"` // removed in version 5
-		MaxConns     *int             `json:"max_conns"` // added in version 3
+		MaxConns     *int             `json:"max_conns"`
 		Requests     int64            `json:"requests"`
 		Responses    responseStats    `json:"responses"`
 		Sent         int64            `json:"sent"`
@@ -104,12 +104,12 @@ type httpUpstreams map[string]struct {
 		Unavail      int64            `json:"unavail"`
 		HealthChecks healthCheckStats `json:"health_checks"`
 		Downtime     int64            `json:"downtime"`
-		HeaderTime   *int64           `json:"header_time"`   // added in version 5
-		ResponseTime *int64           `json:"response_time"` // added in version 5
+		HeaderTime   *int64           `json:"header_time"`
+		ResponseTime *int64           `json:"response_time"`
 	} `json:"peers"`
-	Keepalive int       `json:"keepalive"`
-	Zombies   int       `json:"zombies"` // added in version 6
-	Queue     *struct { // added in version 6
+	Keepalive int `json:"keepalive"`
+	Zombies   int `json:"zombies"`
+	Queue     *struct {
 		Size      int   `json:"size"`
 		MaxSize   int   `json:"max_size"`
 		Overflows int64 `json:"overflows"`
@@ -120,7 +120,7 @@ type streamServerZones map[string]struct {
 	Processing  int            `json:"processing"`
 	Connections int            `json:"connections"`
 	Sessions    *responseStats `json:"sessions"`
-	Discarded   *int64         `json:"discarded"` // added in version 7
+	Discarded   *int64         `json:"discarded"`
 	Received    int64          `json:"received"`
 	Sent        int64          `json:"sent"`
 }
@@ -158,14 +158,14 @@ type extendedHitStats struct {
 	BytesWritten     int64 `json:"bytes_written"`
 }
 
-type httpCaches map[string]struct { // added in version 2
+type httpCaches map[string]struct {
 	Size        int64            `json:"size"`
 	MaxSize     int64            `json:"max_size"`
 	Cold        bool             `json:"cold"`
 	Hit         basicHitStats    `json:"hit"`
 	Stale       basicHitStats    `json:"stale"`
 	Updating    basicHitStats    `json:"updating"`
-	Revalidated *basicHitStats   `json:"revalidated"` // added in version 3
+	Revalidated *basicHitStats   `json:"revalidated"`
 	Miss        extendedHitStats `json:"miss"`
 	Expired     extendedHitStats `json:"expired"`
 	Bypass      extendedHitStats `json:"bypass"`

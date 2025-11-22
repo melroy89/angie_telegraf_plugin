@@ -75,29 +75,22 @@ make rundev
 
 ## Measurements by API version
 
-| Measurement                          | API version (api_version) |
-|--------------------------------------|---------------------------|
-| angie_api_processes             | >= 3                      |
-| angie_api_connections           | >= 3                      |
-| angie_api_ssl                   | >= 3                      |
-| angie_api_slabs_pages           | >= 3                      |
-| angie_api_slabs_slots           | >= 3                      |
-| angie_api_http_requests         | >= 3                      |
-| angie_api_http_server_zones     | >= 3                      |
-| angie_api_http_upstreams        | >= 3                      |
-| angie_api_http_upstream_peers   | >= 3                      |
-| angie_api_http_caches           | >= 3                      |
-| angie_api_stream_upstreams      | >= 3                      |
-| angie_api_stream_upstream_peers | >= 3                      |
-| angie_api_stream_server_zones   | >= 3                      |
-| angie_api_http_location_zones   | >= 5                      |
-| angie_api_resolver_zones        | >= 5                      |
-| angie_api_http_limit_reqs       | >= 6                      |
+| Measurement                     | API version (api_version) |
+|---------------------------------|---------------------------|
+| angie_api_connections           | >= 1                      |
+| angie_api_slabs_pages           | >= 1                      |
+| angie_api_slabs_slots           | >= 1                      |
+| angie_api_http_requests         | >= 1                      |
+| angie_api_http_server_zones     | >= 1                      |
+| angie_api_http_upstreams        | >= 1                      |
+| angie_api_http_upstream_peers   | >= 1                      |
+| angie_api_http_caches           | >= 1                      |
+| angie_api_http_location_zones   | >= 1                      |
+| angie_api_resolver_zones        | >= 1                      |
+| angie_api_http_limit_reqs       | >= 1                      |
 
 ## Metrics
 
-- angie_api_processes
-  - respawned
 - angie_api_connections
   - accepted
   - dropped
@@ -111,51 +104,35 @@ make rundev
   - free
   - reqs
   - fails
-- angie_api_ssl
-  - handshakes
-  - handshakes_failed
-  - session_reuses
-- angie_api_http_requests
-  - total
-  - current
 - angie_api_http_server_zones
+  - total
   - processing
-  - requests
-  - responses_1xx
-  - responses_2xx
-  - responses_3xx
-  - responses_4xx
-  - responses_5xx
-  - responses_total
   - received
   - sent
-  - discarded
+  - responses_xxx
+     - Where `xxx` is the status code (100-599) 
+  - ssl_handhaked (in case of SSL)
+  - ssl_reuses (in case of SSL)
+  - ssl_timedout (in case of SSL)
+  - ssl_failed (in case of SSL)
 - angie_api_http_upstreams
   - keepalive
-  - zombies
 - angie_api_http_upstream_peers
-  - requests
-  - unavail
-  - healthchecks_checks
-  - header_time
-  - state
-  - response_time
-  - active
-  - healthchecks_last_passed
-  - weight
-  - responses_1xx
-  - responses_2xx
-  - responses_3xx
-  - responses_4xx
-  - responses_5xx
-  - received
-  - healthchecks_fails
-  - healthchecks_unhealthy
   - backup
-  - responses_total
+  - weight
+  - state
+  - selected_current
+  - selected_total
+  - selected_last (if present)
   - sent
-  - fails
-  - downtime
+  - received
+  - health_fails
+  - health_unavaible
+  - health_downtime
+  - responses_xxx
+     - Where `xxx` is the status code (100-599) 
+  - service (if configured)
+  - max_conns (if present)
 - angie_api_http_caches
   - size
   - max_size
@@ -182,37 +159,14 @@ make rundev
   - bypass_bytes_written
 - angie_api_stream_upstreams
   - zombies
-- angie_api_stream_upstream_peers
-  - unavail
-  - healthchecks_checks
-  - healthchecks_fails
-  - healthchecks_unhealthy
-  - healthchecks_last_passed
-  - response_time
-  - state
-  - active
-  - weight
-  - received
-  - backup
-  - sent
-  - fails
-  - downtime
-- angie_api_stream_server_zones
+- angie_api_http_location_zones
+  - total
   - processing
-  - connections
-  - received
-  - sent
-- angie_api_location_zones
-  - requests
-  - responses_1xx
-  - responses_2xx
-  - responses_3xx
-  - responses_4xx
-  - responses_5xx
-  - responses_total
-  - received
-  - sent
   - discarded
+  - received
+  - sent
+  - responses_xxx
+     - Where `xxx` is the status code (100-599) 
 - angie_api_resolver_zones
   - name
   - srv
@@ -256,7 +210,7 @@ make rundev
   - zone
   - slot
 
-- angie_api_upstream_peers, angie_api_stream_upstream_peers
+- angie_api_upstream_peers
   - id
   - upstream
   - source
@@ -271,6 +225,10 @@ make rundev
   - source
   - port
   - limit
+
+- angie_api_http_upstream_peers
+  - peer
+  - sid
 
 ## Example Output
 
@@ -293,48 +251,52 @@ telegraf --config telegraf.conf --input-filter angie_api --test
 It produces:
 
 ```text
-angie_api_processes,port=80,source=demo.nginx.com respawned=0i 1570696321000000000
-angie_api_connections,port=80,source=demo.nginx.com accepted=68998606i,active=7i,dropped=0i,idle=57i 1570696322000000000
-angie_api_slabs_pages,port=80,source=demo.nginx.com,zone=hg.nginx.org used=1i,free=503i 1570696322000000000
-angie_api_slabs_pages,port=80,source=demo.nginx.com,zone=trac.nginx.org used=3i,free=500i 1570696322000000000
-angie_api_slabs_slots,port=80,source=demo.nginx.com,zone=hg.nginx.org,slot=8 used=1i,free=503i,reqs=10i,fails=0i 1570696322000000000
-angie_api_slabs_slots,port=80,source=demo.nginx.com,zone=hg.nginx.org,slot=16 used=3i,free=500i,reqs=1024i,fails=0i 1570696322000000000
-angie_api_slabs_slots,port=80,source=demo.nginx.com,zone=trac.nginx.org,slot=8 used=1i,free=503i,reqs=10i,fails=0i 1570696322000000000
-angie_api_slabs_slots,port=80,source=demo.nginx.com,zone=trac.nginx.org,slot=16 used=0i,free=1520i,reqs=0i,fails=1i 1570696322000000000
-angie_api_ssl,port=80,source=demo.nginx.com handshakes=9398978i,handshakes_failed=289353i,session_reuses=1004389i 1570696322000000000
-angie_api_http_requests,port=80,source=demo.nginx.com current=51i,total=264649353i 1570696322000000000
-angie_api_http_server_zones,port=80,source=demo.nginx.com,zone=hg.nginx.org discarded=5i,processing=0i,received=24123604i,requests=60138i,responses_1xx=0i,responses_2xx=59353i,responses_3xx=531i,responses_4xx=249i,responses_5xx=0i,responses_total=60133i,sent=830165221i 1570696322000000000
-angie_api_http_server_zones,port=80,source=demo.nginx.com,zone=trac.nginx.org discarded=250i,processing=0i,received=2184618i,requests=12404i,responses_1xx=0i,responses_2xx=8579i,responses_3xx=2513i,responses_4xx=583i,responses_5xx=479i,responses_total=12154i,sent=139384159i 1570696322000000000
-angie_api_http_server_zones,port=80,source=demo.nginx.com,zone=lxr.nginx.org discarded=1i,processing=0i,received=1011701i,requests=4523i,responses_1xx=0i,responses_2xx=4332i,responses_3xx=28i,responses_4xx=39i,responses_5xx=123i,responses_total=4522i,sent=72631354i 1570696322000000000
-angie_api_http_upstreams,port=80,source=demo.nginx.com,upstream=trac-backend keepalive=0i,zombies=0i 1570696322000000000
-angie_api_http_upstream_peers,id=0,port=80,source=demo.nginx.com,upstream=trac-backend,upstream_address=10.0.0.1:8080 active=0i,backup=false,downtime=0i,fails=0i,header_time=235i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=88581178i,requests=3180i,response_time=235i,responses_1xx=0i,responses_2xx=3168i,responses_3xx=5i,responses_4xx=6i,responses_5xx=0i,responses_total=3179i,sent=1321720i,state="up",unavail=0i,weight=1i 1570696322000000000
-angie_api_http_upstream_peers,id=1,port=80,source=demo.nginx.com,upstream=trac-backend,upstream_address=10.0.0.1:8081 active=0i,backup=true,downtime=0i,fails=0i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=0i,requests=0i,responses_1xx=0i,responses_2xx=0i,responses_3xx=0i,responses_4xx=0i,responses_5xx=0i,responses_total=0i,sent=0i,state="up",unavail=0i,weight=1i 1570696322000000000
-angie_api_http_upstreams,port=80,source=demo.nginx.com,upstream=hg-backend keepalive=0i,zombies=0i 1570696322000000000
-angie_api_http_upstream_peers,id=0,port=80,source=demo.nginx.com,upstream=hg-backend,upstream_address=10.0.0.1:8088 active=0i,backup=false,downtime=0i,fails=0i,header_time=22i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=909402572i,requests=18514i,response_time=88i,responses_1xx=0i,responses_2xx=17799i,responses_3xx=531i,responses_4xx=179i,responses_5xx=0i,responses_total=18509i,sent=10608107i,state="up",unavail=0i,weight=5i 1570696322000000000
-angie_api_http_upstream_peers,id=1,port=80,source=demo.nginx.com,upstream=hg-backend,upstream_address=10.0.0.1:8089 active=0i,backup=true,downtime=0i,fails=0i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=0i,requests=0i,responses_1xx=0i,responses_2xx=0i,responses_3xx=0i,responses_4xx=0i,responses_5xx=0i,responses_total=0i,sent=0i,state="up",unavail=0i,weight=1i 1570696322000000000
-angie_api_http_upstreams,port=80,source=demo.nginx.com,upstream=lxr-backend keepalive=0i,zombies=0i 1570696322000000000
-angie_api_http_upstream_peers,id=0,port=80,source=demo.nginx.com,upstream=lxr-backend,upstream_address=unix:/tmp/cgi.sock active=0i,backup=false,downtime=0i,fails=123i,header_time=91i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=71782888i,requests=4354i,response_time=91i,responses_1xx=0i,responses_2xx=4230i,responses_3xx=0i,responses_4xx=0i,responses_5xx=0i,responses_total=4230i,sent=3088656i,state="up",unavail=0i,weight=1i 1570696322000000000
-angie_api_http_upstream_peers,id=1,port=80,source=demo.nginx.com,upstream=lxr-backend,upstream_address=unix:/tmp/cgib.sock active=0i,backup=true,downtime=0i,fails=0i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,max_conns=42i,received=0i,requests=0i,responses_1xx=0i,responses_2xx=0i,responses_3xx=0i,responses_4xx=0i,responses_5xx=0i,responses_total=0i,sent=0i,state="up",unavail=0i,weight=1i 1570696322000000000
-angie_api_http_upstreams,port=80,source=demo.nginx.com,upstream=demo-backend keepalive=0i,zombies=0i 1570696322000000000
-angie_api_http_upstream_peers,id=0,port=80,source=demo.nginx.com,upstream=demo-backend,upstream_address=10.0.0.2:15431 active=0i,backup=false,downtime=0i,fails=0i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=0i,requests=0i,responses_1xx=0i,responses_2xx=0i,responses_3xx=0i,responses_4xx=0i,responses_5xx=0i,responses_total=0i,sent=0i,state="up",unavail=0i,weight=1i 1570696322000000000
-angie_api_http_caches,cache=http_cache,port=80,source=demo.nginx.com bypass_bytes=0i,bypass_bytes_written=0i,bypass_responses=0i,bypass_responses_written=0i,cold=false,expired_bytes=381518640i,expired_bytes_written=363449785i,expired_responses=42114i,expired_responses_written=39954i,hit_bytes=6321885979i,hit_responses=596730i,max_size=536870912i,miss_bytes=48512185i,miss_bytes_written=155600i,miss_responses=6052i,miss_responses_written=136i,revalidated_bytes=0i,revalidated_responses=0i,size=765952i,stale_bytes=0i,stale_responses=0i,updating_bytes=0i,updating_responses=0i 1570696323000000000
-angie_api_stream_server_zones,port=80,source=demo.nginx.com,zone=postgresql_loadbalancer connections=0i,processing=0i,received=0i,sent=0i 1570696323000000000
-angie_api_stream_server_zones,port=80,source=demo.nginx.com,zone=dns_loadbalancer connections=0i,processing=0i,received=0i,sent=0i 1570696323000000000
-angie_api_stream_upstreams,port=80,source=demo.nginx.com,upstream=postgresql_backends zombies=0i 1570696323000000000
-angie_api_stream_upstream_peers,id=0,port=80,source=demo.nginx.com,upstream=postgresql_backends,upstream_address=10.0.0.2:15432 active=0i,backup=false,connections=0i,downtime=0i,fails=0i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=0i,sent=0i,state="up",unavail=0i,weight=1i 1570696323000000000
-angie_api_stream_upstream_peers,id=1,port=80,source=demo.nginx.com,upstream=postgresql_backends,upstream_address=10.0.0.2:15433 active=0i,backup=false,connections=0i,downtime=0i,fails=0i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=0i,sent=0i,state="up",unavail=0i,weight=1i 1570696323000000000
-angie_api_stream_upstream_peers,id=2,port=80,source=demo.nginx.com,upstream=postgresql_backends,upstream_address=10.0.0.2:15434 active=0i,backup=false,connections=0i,downtime=0i,fails=0i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=0i,sent=0i,state="up",unavail=0i,weight=1i 1570696323000000000
-angie_api_stream_upstream_peers,id=3,port=80,source=demo.nginx.com,upstream=postgresql_backends,upstream_address=10.0.0.2:15435 active=0i,backup=false,connections=0i,downtime=0i,fails=0i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=0i,sent=0i,state="down",unavail=0i,weight=1i 1570696323000000000
-angie_api_stream_upstreams,port=80,source=demo.nginx.com,upstream=dns_udp_backends zombies=0i 1570696323000000000
-angie_api_stream_upstream_peers,id=0,port=80,source=demo.nginx.com,upstream=dns_udp_backends,upstream_address=10.0.0.5:53 active=0i,backup=false,connections=0i,downtime=0i,fails=0i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=0i,sent=0i,state="up",unavail=0i,weight=2i 1570696323000000000
-angie_api_stream_upstream_peers,id=1,port=80,source=demo.nginx.com,upstream=dns_udp_backends,upstream_address=10.0.0.2:53 active=0i,backup=false,connections=0i,downtime=0i,fails=0i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=0i,sent=0i,state="up",unavail=0i,weight=1i 1570696323000000000
-angie_api_stream_upstream_peers,id=2,port=80,source=demo.nginx.com,upstream=dns_udp_backends,upstream_address=10.0.0.7:53 active=0i,backup=false,connections=0i,downtime=0i,fails=0i,healthchecks_checks=0i,healthchecks_fails=0i,healthchecks_unhealthy=0i,received=0i,sent=0i,state="down",unavail=0i,weight=1i 1570696323000000000
-angie_api_stream_upstreams,port=80,source=demo.nginx.com,upstream=unused_tcp_backends zombies=0i 1570696323000000000
-angie_api_http_location_zones,port=80,source=demo.nginx.com,zone=swagger discarded=0i,received=1622i,requests=8i,responses_1xx=0i,responses_2xx=7i,responses_3xx=0i,responses_4xx=1i,responses_5xx=0i,responses_total=8i,sent=638333i 1570696323000000000
-angie_api_http_location_zones,port=80,source=demo.nginx.com,zone=api-calls discarded=64i,received=337530181i,requests=1726513i,responses_1xx=0i,responses_2xx=1726428i,responses_3xx=0i,responses_4xx=21i,responses_5xx=0i,responses_total=1726449i,sent=1902577668i 1570696323000000000
-angie_api_resolver_zones,port=80,source=demo.nginx.com,zone=resolver1 addr=0i,formerr=0i,name=0i,noerror=0i,notimp=0i,nxdomain=0i,refused=0i,servfail=0i,srv=0i,timedout=0i,unknown=0i 1570696324000000000
-angie_api_http_limit_reqs,port=80,source=demo.nginx.com,limit=limit_1 delayed=0i,delayed_dry_run=0i,passed=6i,rejected=9i,rejected_dry_run=0i 1570696322000000000
-angie_api_http_limit_reqs,port=80,source=demo.nginx.com,limit=limit_2 delayed=13i,delayed_dry_run=3i,passed=6i,rejected=1i,rejected_dry_run=31i 1570696322000000000
+angie_api_connections,port=80,source=angie.host.tld accepted=11614i,dropped=0i,active=22i,idle=84i 1763846935468587626
+angie_api_slabs_pages,port=80,source=angie.host.tld,zone=upstream used=6i,free=57i 1763846935469280899
+angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=upstream free=125i,reqs=2i,fails=0i,used=2i 1763846935469286437
+angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=upstream used=4i,free=28i,reqs=4i,fails=0i 1763846935469288029
+angie_api_slabs_slots,port=80,slot=512,source=angie.host.tld,zone=upstream used=1i,free=7i,reqs=1i,fails=0i 1763846935469326477
+angie_api_slabs_slots,port=80,slot=8,source=angie.host.tld,zone=upstream fails=0i,used=2i,free=502i,reqs=2i 1763846935469328360
+angie_api_slabs_slots,port=80,slot=16,source=angie.host.tld,zone=upstream reqs=2i,fails=0i,used=2i,free=252i 1763846935469329692
+angie_api_slabs_pages,port=80,source=angie.host.tld,zone=mbin_limit used=2i,free=2542i 1763846935469344414
+angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=mbin_limit used=1i,free=126i,reqs=1i,fails=0i 1763846935469345846
+angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=mbin_limit used=14i,free=18i,reqs=1233i,fails=0i 1763846935469347439
+angie_api_slabs_pages,port=80,source=angie.host.tld,zone=mercure used=6i,free=248i 1763846935469365045
+angie_api_slabs_slots,port=80,slot=512,source=angie.host.tld,zone=mercure free=7i,reqs=1i,fails=0i,used=1i 1763846935469367749
+angie_api_slabs_slots,port=80,slot=8,source=angie.host.tld,zone=mercure used=2i,free=502i,reqs=2i,fails=0i 1763846935469369702
+angie_api_slabs_slots,port=80,slot=16,source=angie.host.tld,zone=mercure used=2i,free=252i,reqs=2i,fails=0i 1763846935469385416
+angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=mercure fails=0i,used=2i,free=125i,reqs=2i 1763846935469387218
+angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=mercure free=28i,reqs=4i,fails=0i,used=4i 1763846935469388961
+angie_api_slabs_pages,port=80,source=angie.host.tld,zone=CACHE used=16i,free=2528i 1763846935469407349
+angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=CACHE used=1i,free=126i,reqs=1i,fails=0i 1763846935469408951
+angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=CACHE fails=0i,used=437i,free=11i,reqs=468i 1763846935469410203
+angie_api_slabs_slots,port=80,slot=512,source=angie.host.tld,zone=CACHE fails=0i,used=1i,free=7i,reqs=1i 1763846935469422151
+angie_api_slabs_pages,port=80,source=angie.host.tld,zone=ip used=2i,free=2542i 1763846935469423833
+angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=ip free=126i,reqs=1i,fails=0i,used=1i 1763846935469425636
+angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=ip free=12i,reqs=1602i,fails=0i,used=20i 1763846935469448551
+angie_api_slabs_pages,port=80,source=angie.host.tld,zone=matrix_limit free=2542i,used=2i 1763846935469457985
+angie_api_slabs_slots,port=80,slot=64,source=angie.host.tld,zone=matrix_limit free=63i,reqs=1i,fails=0i,used=1i 1763846935469461240
+angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=matrix_limit used=11i,free=21i,reqs=1209i,fails=0i 1763846935469500429
+angie_api_slabs_pages,port=80,source=angie.host.tld,zone=addr used=2i,free=2542i 1763846935469505316
+angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=addr fails=0i,used=1i,free=31i,reqs=1i 1763846935469506928
+angie_api_slabs_slots,port=80,slot=32,source=angie.host.tld,zone=addr used=1i,free=126i,reqs=1i,fails=0i 1763846935469526528
+angie_api_slabs_slots,port=80,slot=64,source=angie.host.tld,zone=addr free=0i,reqs=39i,fails=0i,used=0i 1763846935469527840
+angie_api_slabs_pages,port=80,source=angie.host.tld,zone=SSL used=1963i,free=581i 1763846935469529352
+angie_api_slabs_slots,port=80,slot=64,source=angie.host.tld,zone=SSL used=1i,free=63i,reqs=1i,fails=0i 1763846935469538826
+angie_api_slabs_slots,port=80,slot=128,source=angie.host.tld,zone=SSL used=20897i,free=31i,reqs=20897i,fails=0i 1763846935469541691
+angie_api_slabs_slots,port=80,slot=256,source=angie.host.tld,zone=SSL fails=0i,used=20897i,free=15i,reqs=20897i 1763846935469543143
+angie_api_slabs_slots,port=80,slot=512,source=angie.host.tld,zone=SSL used=1i,free=7i,reqs=1i,fails=0i 1763846935469558156
+angie_api_http_server_zones,port=80,source=angie.host.tld,zone=server_zone processing=0i,sent=0i,ssl_reuses=0i,ssl_timedout=0i,discarded=0i,received=0i,ssl_handhaked=0i,ssl_failed=0i,total=0i 1763846935470146020
+angie_api_http_server_zones,port=80,source=angie.host.tld,zone=example.zone.tld total=849i,processing=17i,discarded=0i,sent=14214953i,responses_101=54i,responses_200=639i,responses_304=139i,ssl_handhaked=664i,received=267614i,ssl_reuses=424i,ssl_timedout=0i,ssl_failed=0i 1763846935470152089
+angie_api_http_upstreams,port=80,source=angie.host.tld,upstream=mercure keepalive=0i 1763846935470758731
+angie_api_http_upstream_peers,peer=127.0.0.1:3005,port=80,sid=0349acf60535cd8bdf89fb53de0f959e,source=angie.host.tld,upstream=mercure state="up",sent=0i,weight=1i,selected_current=0i,selected_total=0i,reveived=0i,health_fails=0i,health_unavaible=0i,health_downtime=0i,backup=false 1763846935470766403
+angie_api_http_upstreams,port=80,source=angie.host.tld,upstream=explorer keepalive=0i 1763846935470769057
+angie_api_http_upstream_peers,peer=127.0.0.1:8999,port=80,sid=adbdc4c737eef0c63976e2f697c8c8b3,source=angie.host.tld,upstream=explorer backup=false,weight=1i,selected_total=674i,sent=398003i,reveived=14527538i,health_fails=0i,selected_last="2025-11-22T21:28:00Z",responses_200=557i,state="up",selected_current=17i,health_unavaible=0i,health_downtime=0i,responses_101=54i,responses_304=46i 1763846935470800063
+angie_api_http_caches,cache=CACHE,port=80,source=angie.host.tld miss_responses=67i,miss_bytes_written=834493i,expired_bytes_written=1351616i,bypass_bytes=0i,bypass_bytes_written=0i,cold=false,stale_responses=0i,stale_bytes=0i,bypass_responses=0i,bypass_responses_written=0i,updating_responses=0i,updating_bytes=0i,miss_responses_written=36i,expired_responses=89i,max_size=1073741824i,revalidated_responses=0i,revalidated_bytes=0i,miss_bytes=843208i,expired_bytes=1351616i,expired_responses_written=89i,size=7794688i,hit_responses=64i,hit_bytes=421058i 1763846935471333465
+angie_api_resolver_zones,port=80,source=angie.host.tld,zone=resolver_zone servfail=0i,nxdomain=0i,timedout=0i,name=0i,formerr=0i,notimp=0i,refused=0i,unknown=0i,srv=0i,addr=0i,noerror=0i 1763846935472157204
+angie_api_http_limit_reqs,limit=ip,port=80,source=angie.host.tld passed=9223i,delayed=1i,rejected=0i,delayed_dry_run=0i,rejected_dry_run=0i 1763846935472578227
+angie_api_http_limit_reqs,limit=matrix_limit,port=80,source=angie.host.tld rejected_dry_run=0i,passed=1822i,delayed=0i,rejected=0i,delayed_dry_run=0i 1763846935472582754
+angie_api_http_limit_reqs,limit=mbin_limit,port=80,source=angie.host.tld rejected_dry_run=0i,passed=5157i,delayed=0i,rejected=0i,delayed_dry_run=0i 1763846935472584967
 ```
 
 ### Reference material

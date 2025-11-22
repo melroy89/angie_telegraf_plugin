@@ -171,15 +171,14 @@ type httpUpstreams map[string]struct {
 		SID       string           `json:"sid"`
 	} `json:"peers"`
 	Keepalive int `json:"keepalive"`
+	// Zombies   int `json:"zombies"`
+	// Queue     *struct {
+	// 	Size      int   `json:"size"`
+	// 	MaxSize   int   `json:"max_size"`
+	// 	Overflows int64 `json:"overflows"`
+	// } `json:"queue"`
+	// backup_switch is also only in Pro version
 }
-
-// Zombies   int `json:"zombies"`
-// Queue     *struct {
-// 	Size      int   `json:"size"`
-// 	MaxSize   int   `json:"max_size"`
-// 	Overflows int64 `json:"overflows"`
-// } `json:"queue"`
-// backup_switch is also only in Pro version
 
 type streamServerZones map[string]struct {
 	Processing  int            `json:"processing"`

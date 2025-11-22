@@ -662,7 +662,7 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 				"selected_current": peer.Selected.Current,
 				"selected_total":   peer.Selected.Total,
 				"sent":             peer.Data.Sent,
-				"reveived":         peer.Data.Received,
+				"received":         peer.Data.Received,
 				"health_fails":     peer.Health.Fails,
 				"health_unavaible": peer.Health.Unavaible,
 				"health_downtime":  peer.Health.Downtime,

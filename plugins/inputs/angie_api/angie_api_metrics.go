@@ -656,16 +656,16 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 		)
 		for peerName, peer := range upstream.Peers {
 			peerFields := map[string]interface{}{
-				"backup":           peer.Backup,
-				"weight":           peer.Weight,
-				"state":            peer.State,
-				"selected_current": peer.Selected.Current,
-				"selected_total":   peer.Selected.Total,
-				"sent":             peer.Data.Sent,
-				"received":         peer.Data.Received,
-				"health_fails":     peer.Health.Fails,
-				"health_unavaible": peer.Health.Unavaible,
-				"health_downtime":  peer.Health.Downtime,
+				"backup":             peer.Backup,
+				"weight":             peer.Weight,
+				"state":              peer.State,
+				"selected_current":   peer.Selected.Current,
+				"selected_total":     peer.Selected.Total,
+				"sent":               peer.Data.Sent,
+				"received":           peer.Data.Received,
+				"health_fails":       peer.Health.Fails,
+				"health_unavailable": peer.Health.Unavailable,
+				"health_downtime":    peer.Health.Downtime,
 			}
 			// Optional selected last data field
 			if peer.Selected.Last != nil {

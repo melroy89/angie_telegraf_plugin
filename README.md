@@ -96,6 +96,7 @@ make rundev
 | angie_api_http_location_zones   | >= 1                      |
 | angie_api_resolver_zones        | >= 1                      |
 | angie_api_http_limit_reqs       | >= 1                      |
+| angie_api_http_limit_conns      | >= 1                      |
 
 ## Metrics
 
@@ -187,10 +188,15 @@ make rundev
   - unknown
 - angie_api_http_limit_reqs
   - passed
+  - skipped
   - delayed
   - rejected
-  - delayed_dry_run
-  - rejected_dry_run
+  - exhausted
+- angie_api_http_limit_conns
+  - passed
+  - skipped
+  - rejected
+  - exhausted
 
 ### Tags
 
@@ -219,7 +225,7 @@ make rundev
   - source
   - port
 
-- angie_api_http_limit_reqs
+- angie_api_http_limit_reqs, angie_api_http_limit_conns
   - source
   - port
   - limit

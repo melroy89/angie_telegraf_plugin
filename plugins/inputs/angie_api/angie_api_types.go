@@ -236,9 +236,16 @@ type httpCaches map[string]struct {
 }
 
 type httpLimitReqs map[string]struct {
-	Passed         int64 `json:"passed"`
-	Delayed        int64 `json:"delayed"`
-	Rejected       int64 `json:"rejected"`
-	DelayedDryRun  int64 `json:"delayed_dry_run"`
-	RejectedDryRun int64 `json:"rejected_dry_run"`
+	Passed    int64 `json:"passed"`
+	Skipped   int64 `json:"skipped"`
+	Delayed   int64 `json:"delayed"`
+	Rejected  int64 `json:"rejected"`
+	Exhausted int64 `json:"exhausted"`
+}
+
+type httpLimitConns map[string]struct {
+	Passed    int64 `json:"passed"`
+	Skipped   int64 `json:"skipped"`
+	Rejected  int64 `json:"rejected"`
+	Exhausted int64 `json:"exhausted"`
 }

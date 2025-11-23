@@ -32,6 +32,7 @@ func (n *AngieAPI) gatherMetrics(addr *url.URL, acc telegraf.Accumulator) {
 	addError(acc, n.gatherHTTPLocationZonesMetrics(addr, acc))
 	addError(acc, n.gatherResolverZonesMetrics(addr, acc))
 	addError(acc, n.gatherHTTPLimitReqsMetrics(addr, acc))
+	addError(acc, n.gatherHTTPLimitConnsMetrics(addr, acc))
 }
 
 func addError(acc telegraf.Accumulator, err error) {
@@ -1063,13 +1064,48 @@ func (n *AngieAPI) gatherHTTPLimitReqsMetrics(addr *url.URL, acc telegraf.Accumu
 		acc.AddFields(
 			"angie_api_http_limit_reqs",
 			map[string]interface{}{
-				"passed":           limit.Passed,
-				"delayed":          limit.Delayed,
-				"rejected":         limit.Rejected,
-				"delayed_dry_run":  limit.DelayedDryRun,
-				"rejected_dry_run": limit.RejectedDryRun,
+				"passed":    limit.Passed,
+				"skipped":   limit.Skipped,
+				"delayed":   limit.Delayed,
+				"rejected":  limit.Rejected,
+				"exhausted": limit.Exhausted,
 			},
 			limitReqsTags,
+		)
+	}
+
+	return nil
+}
+
+func (n *AngieAPI) gatherHTTPLimitConnsMetrics(addr *url.URL, acc telegraf.Accumulator) error {
+	body, err := n.gatherURL(addr, httpLimitConnsPath)
+	if err != nil {
+		return err
+	}
+
+	var httpLimitConns httpLimitConns
+
+	if err := json.Unmarshal(body, &httpLimitConns); err != nil {
+		return err
+	}
+
+	tags := getTags(addr)
+
+	for limitConnName, limit := range httpLimitConns {
+		limitConnsTags := make(map[string]string, len(tags)+1)
+		for k, v := range tags {
+			limitConnsTags[k] = v
+		}
+		limitConnsTags["limit"] = limitConnName
+		acc.AddFields(
+			"angie_api_http_limit_conns",
+			map[string]interface{}{
+				"passed":    limit.Passed,
+				"skipped":   limit.Skipped,
+				"rejected":  limit.Rejected,
+				"exhausted": limit.Exhausted,
+			},
+			limitConnsTags,
 		)
 	}
 

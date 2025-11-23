@@ -36,6 +36,7 @@ const (
 	httpUpstreamsPath     = "http/upstreams"
 	httpCachesPath        = "http/caches"
 	httpLimitReqsPath     = "http/limit_reqs"
+	httpLimitConnsPath    = "http/limit_conns"
 	resolverZonesPath     = "resolvers"
 
 	streamServerZonesPath = "stream/server_zones"

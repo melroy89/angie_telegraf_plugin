@@ -615,19 +615,6 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 		return err
 	}
 
-	// log body for debugging
-	// var debug interface{}
-	// if err := json.Unmarshal(body, &debug); err == nil {
-	// 	if pretty, err := json.MarshalIndent(debug, "", "  "); err == nil {
-	// 		fmt.Printf("angie_api: %s response body (pretty JSON):\n%s\n", httpUpstreamsPath, string(pretty))
-	// 	} else {
-	// 		fmt.Printf("angie_api: %s response body (raw):\n%s\n", httpUpstreamsPath, string(body))
-	// 	}
-	// } else {
-	// 	// Not valid JSON — print raw bytes
-	// 	fmt.Printf("angie_api: %s response body (raw, json unmarshal failed: %v):\n%s\n", httpUpstreamsPath, err, string(body))
-	// }
-
 	var httpUpstreams httpUpstreams
 
 	if err := json.Unmarshal(body, &httpUpstreams); err != nil {
@@ -645,11 +632,6 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 		upstreamFields := map[string]interface{}{
 			"keepalive": upstream.Keepalive,
 		}
-		// if upstream.Queue != nil {
-		// 	upstreamFields["queue_size"] = upstream.Queue.Size
-		// 	upstreamFields["queue_max_size"] = upstream.Queue.MaxSize
-		// 	upstreamFields["queue_overflows"] = upstream.Queue.Overflows
-		// }
 		acc.AddFields(
 			"angie_api_http_upstreams",
 			upstreamFields,

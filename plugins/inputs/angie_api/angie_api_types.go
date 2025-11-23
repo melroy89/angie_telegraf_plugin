@@ -32,21 +32,27 @@ type ssl struct {
 }
 
 type resolverZones map[string]struct {
-	Requests struct {
+	Queries struct {
 		Name int64 `json:"name"`
 		Srv  int64 `json:"srv"`
 		Addr int64 `json:"addr"`
-	} `json:"requests"`
+	} `json:"queries"`
 	Responses struct {
-		Noerror  int64 `json:"noerror"`
-		Formerr  int64 `json:"formerr"`
-		Servfail int64 `json:"servfail"`
-		Nxdomain int64 `json:"nxdomain"`
-		Notimp   int64 `json:"notimp"`
-		Refused  int64 `json:"refused"`
-		Timedout int64 `json:"timedout"`
-		Unknown  int64 `json:"unknown"`
+		Success       int64 `json:"success"`
+		TimedOut      int64 `json:"timedout"`
+		FormatError   int64 `json:"format_error"`
+		ServerFailure int64 `json:"server_failure"`
+		NotFound      int64 `json:"not_found"`
+		Unimplemented int64 `json:"unimplemented"`
+		Refused       int64 `json:"refused"`
+		Other         int64 `json:"other"`
 	} `json:"responses"`
+	Sent struct {
+		A    int64 `json:"a"`
+		AAAA int64 `json:"aaaa"`
+		Ptr  int64 `json:"ptr"`
+		Srv  int64 `json:"srv"`
+	} `json:"sent"`
 }
 
 type httpRequests struct {

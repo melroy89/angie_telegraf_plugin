@@ -295,9 +295,10 @@ angie_api_http_upstreams,port=80,source=angie.host.tld,upstream=another_upstream
 angie_api_http_upstream_peers,peer=127.0.0.1:8999,port=80,sid=adbdc4c737eef0c63976e2f697c8c8b3,source=angie.host.tld,upstream=another_upstream backup=false,weight=1i,selected_total=674i,sent=398003i,reveived=14527538i,health_fails=0i,selected_last="2025-11-22T21:28:00Z",responses_200=557i,state="up",selected_current=17i,health_unavaible=0i,health_downtime=0i,responses_101=54i,responses_304=46i 1763846935470800063
 angie_api_http_caches,cache=CACHE,port=80,source=angie.host.tld miss_responses=67i,miss_bytes_written=834493i,expired_bytes_written=1351616i,bypass_bytes=0i,bypass_bytes_written=0i,cold=false,stale_responses=0i,stale_bytes=0i,bypass_responses=0i,bypass_responses_written=0i,updating_responses=0i,updating_bytes=0i,miss_responses_written=36i,expired_responses=89i,max_size=1073741824i,revalidated_responses=0i,revalidated_bytes=0i,miss_bytes=843208i,expired_bytes=1351616i,expired_responses_written=89i,size=7794688i,hit_responses=64i,hit_bytes=421058i 1763846935471333465
 angie_api_resolver_zones,port=80,source=angie.host.tld,zone=resolver_zone servfail=0i,nxdomain=0i,timedout=0i,name=0i,formerr=0i,notimp=0i,refused=0i,unknown=0i,srv=0i,addr=0i,noerror=0i 1763846935472157204
-angie_api_http_limit_reqs,limit=ip,port=80,source=angie.host.tld passed=9223i,delayed=1i,rejected=0i,delayed_dry_run=0i,rejected_dry_run=0i 1763846935472578227
-angie_api_http_limit_reqs,limit=matrix_limit,port=80,source=angie.host.tld rejected_dry_run=0i,passed=1822i,delayed=0i,rejected=0i,delayed_dry_run=0i 1763846935472582754
-angie_api_http_limit_reqs,limit=mbin_limit,port=80,source=angie.host.tld rejected_dry_run=0i,passed=5157i,delayed=0i,rejected=0i,delayed_dry_run=0i 1763846935472584967
+angie_api_http_limit_reqs,limit=ip,port=80,source=angie.host.tld passed=102772i,skipped=0i,delayed=208i,rejected=4i,exhausted=0i 1763922956010183369
+angie_api_http_limit_reqs,limit=some_limit,port=80,source=angie.host.tld passed=16223i,skipped=0i,delayed=0i,rejected=0i,exhausted=0i 1763922956010187055
+angie_api_http_limit_reqs,limit=another_limit,port=80,source=angie.host.tld passed=47085i,skipped=0i,delayed=0i,rejected=0i,exhausted=0i 1763922956010191722
+angie_api_http_limit_conns,limit=addr,port=80,source=angie.host.tld skipped=0i,rejected=1i,exhausted=0i,passed=355i 1763922956011417885
 ```
 
 ### Reference material

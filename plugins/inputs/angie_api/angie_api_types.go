@@ -235,7 +235,7 @@ type httpCaches map[string]struct {
 	Hit         basicHitStats    `json:"hit"`
 	Stale       basicHitStats    `json:"stale"`
 	Updating    basicHitStats    `json:"updating"`
-	Revalidated *basicHitStats   `json:"revalidated"`
+	Revalidated basicHitStats    `json:"revalidated"`
 	Miss        extendedHitStats `json:"miss"`
 	Expired     extendedHitStats `json:"expired"`
 	Bypass      extendedHitStats `json:"bypass"`

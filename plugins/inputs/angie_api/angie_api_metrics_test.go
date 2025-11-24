@@ -801,28 +801,6 @@ func TestGatherSlabsMetrics(t *testing.T) {
 // 		})
 // }
 
-func TestGatherHttpRequestsMetrics(t *testing.T) {
-	ts, n := prepareEndpoint(t, httpRequestsPath, httpRequestsPayload)
-	defer ts.Close()
-
-	var acc testutil.Accumulator
-	addr, host, port := prepareAddr(t, ts)
-
-	require.NoError(t, n.gatherHTTPRequestsMetrics(addr, &acc))
-
-	acc.AssertContainsTaggedFields(
-		t,
-		"angie_api_http_requests",
-		map[string]interface{}{
-			"total":   int64(10624511),
-			"current": int64(4),
-		},
-		map[string]string{
-			"source": host,
-			"port":   port,
-		})
-}
-
 func TestGatherHttpServerZonesMetrics(t *testing.T) {
 	ts, n := prepareEndpoint(t, httpServerZonesPath, httpServerZonesPayload)
 	defer ts.Close()

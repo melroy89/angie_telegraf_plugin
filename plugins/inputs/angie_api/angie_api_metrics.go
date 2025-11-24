@@ -48,7 +48,8 @@ func addError(acc telegraf.Accumulator, err error) {
 }
 
 func (n *AngieAPI) gatherURL(addr *url.URL, path string) ([]byte, error) {
-	address := fmt.Sprintf("%s/%s", addr.String(), path)
+	// Turn off pretty output to safe bandwidth
+	address := fmt.Sprintf("%s/%s?pretty=off", addr.String(), path)
 	resp, err := n.client.Get(address)
 
 	if err != nil {

@@ -654,6 +654,10 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 			if peer.Selected.Last != nil {
 				peerFields["selected_last"] = peer.Selected.Last
 			}
+			// Optional downstart field (only present if peer became unavailable)
+			if peer.Health.Downstart != nil {
+				peerFields["health_downstart"] = peer.Health.Downstart
+			}
 
 			// Only include codes fields that are present (and only the important ones)
 			if peer.Responses.Response100 != nil {

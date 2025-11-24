@@ -146,10 +146,10 @@ type httpLocationZones map[string]struct {
 }
 
 type healthCheckStats struct {
-	Fails       int64 `json:"fails"`
-	Unavailable int64 `json:"unavailable"`
-	Downtime    int64 `json:"downtime"`
-	// downstart?
+	Fails       int64   `json:"fails"`
+	Unavailable int64   `json:"unavailable"`
+	Downtime    int64   `json:"downtime"`
+	Downstart   *string `json:"downstart"`
 }
 
 type selected struct {

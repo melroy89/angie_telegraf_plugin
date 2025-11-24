@@ -23,7 +23,6 @@ func (n *AngieAPI) gatherMetrics(addr *url.URL, acc telegraf.Accumulator) {
 	addError(acc, n.gatherConnectionsMetrics(addr, acc))
 	addError(acc, n.gatherSlabsMetrics(addr, acc))
 	// addError(acc, n.gatherSslMetrics(addr, acc))
-	// addError(acc, n.gatherHTTPRequestsMetrics(addr, acc))
 	addError(acc, n.gatherHTTPServerZonesMetrics(addr, acc))
 	addError(acc, n.gatherHTTPUpstreamsMetrics(addr, acc))
 	addError(acc, n.gatherHTTPCachesMetrics(addr, acc))
@@ -207,31 +206,6 @@ func (n *AngieAPI) gatherSlabsMetrics(addr *url.URL, acc telegraf.Accumulator) e
 
 // 	return nil
 // }
-
-// Not used (yet)
-func (n *AngieAPI) gatherHTTPRequestsMetrics(addr *url.URL, acc telegraf.Accumulator) error {
-	body, err := n.gatherURL(addr, httpRequestsPath)
-	if err != nil {
-		return err
-	}
-
-	var httpRequests = &httpRequests{}
-
-	if err := json.Unmarshal(body, httpRequests); err != nil {
-		return err
-	}
-
-	acc.AddFields(
-		"angie_api_http_requests",
-		map[string]interface{}{
-			"total":   httpRequests.Total,
-			"current": httpRequests.Current,
-		},
-		getTags(addr),
-	)
-
-	return nil
-}
 
 func (n *AngieAPI) gatherHTTPServerZonesMetrics(addr *url.URL, acc telegraf.Accumulator) error {
 	body, err := n.gatherURL(addr, httpServerZonesPath)

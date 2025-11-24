@@ -1,7 +1,7 @@
 # Angie API Input Plugin
 
 This plugin gathers metrics from the **free** and open-source
-[Angie web server][angie] via the [REST API][api].
+[Angie web server][angie] via the [REST API][api]. And see also the compatible [Grafana dashboard](https://grafana.com/grafana/dashboards/24461-angie-metrics/).
 
 
 ⭐ Telegraf v1.9.0
@@ -62,6 +62,10 @@ See the [CONFIGURATION.md](https://github.com/influxdata/telegraf/blob/master/do
   ## Use TLS but skip chain & host verification
   # insecure_skip_verify = false
 ```
+
+## Grafana Dashboard
+
+This Telegraf plugin _could_ be paired with [my Grafana Angie Metrics Dashboard](https://grafana.com/grafana/dashboards/24461-angie-metrics/).
 
 ## Developers
 

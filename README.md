@@ -127,7 +127,7 @@ make rundev
   - received
   - sent
   - responses_xxx
-     - Where `xxx` is the status code (100-599) 
+     - Where `xxx` is the status code (100-599)
   - ssl_handhaked (in case of SSL)
   - ssl_reuses (in case of SSL)
   - ssl_timedout (in case of SSL)
@@ -148,7 +148,7 @@ make rundev
   - health_downtime
   - health_downstart (if present)
   - responses_xxx
-     - Where `xxx` is the status code (100-599) 
+     - Where `xxx` is the status code (100-599)
   - service (if configured)
   - max_conns (if present)
 - angie_api_http_caches
@@ -182,23 +182,23 @@ make rundev
   - received
   - sent
   - responses_xxx
-     - Where `xxx` is the status code (100-599) 
+     - Where `xxx` is the status code (100-599)
 - angie_api_resolver_zones
-	- queries_name
-	- queries_srv
-	- queries_addr
-	- sent_a
-	- sent_aaaa
-	- sent_srv
-	- sent_ptr
-	- success
-	- timedout
-	- format_error
-	- server_failure
-	- not_found
-	- unimplemented
-	- refused
-	- other
+  - queries_name
+  - queries_srv
+  - queries_addr
+  - sent_a
+  - sent_aaaa
+  - sent_srv
+  - sent_ptr
+  - success
+  - timedout
+  - format_error
+  - server_failure
+  - not_found
+  - unimplemented
+  - refused
+  - other
 - angie_api_http_limit_reqs
   - passed
   - skipped
@@ -233,8 +233,8 @@ make rundev
   - selected_current
   - selected_total
   - selected_last (if present)
-	- sent
-	- received      
+  - sent
+  - received
   - health_fails
   - health_unavailable
   - health_downtime

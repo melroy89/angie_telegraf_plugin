@@ -66,6 +66,22 @@ type requestsStats struct {
 	Discarded  int64 `json:"discarded"`
 }
 
+type connectionsStats struct {
+	Total      int64 `json:"total"`
+	Processing int64 `json:"processing"`
+	Discarded  int64 `json:"discarded"`
+	Passed     int64 `json:"passed"`
+}
+
+type sessionsStats struct {
+	Success            int64 `json:"success"`
+	Invalid            int64 `json:"invalid"`
+	Forbidden          int64 `json:"forbidden"`
+	InternalError      int64 `json:"internal_error"`
+	BadGateway         int64 `json:"bad_gateway"`
+	ServiceUnavailable int64 `json:"service_unavailable"`
+}
+
 type responseStats struct {
 	// Table of response codes (100-599)
 	Response100 *int64 `json:"100"`
@@ -145,7 +161,7 @@ type httpLocationZones map[string]struct {
 	Data      data          `json:"data"`
 }
 
-type healthCheckStats struct {
+type healthStats struct {
 	Fails       int64   `json:"fails"`
 	Unavailable int64   `json:"unavailable"`
 	Downtime    int64   `json:"downtime"`
@@ -165,16 +181,16 @@ type data struct {
 
 type httpUpstreams map[string]struct {
 	Peers map[string]struct {
-		Service   *string          `json:"service"`
-		Backup    bool             `json:"backup"`
-		Weight    int              `json:"weight"`
-		State     string           `json:"state"`
-		Selected  selected         `json:"selected"`
-		MaxConns  *int             `json:"max_conns"`
-		Responses responseStats    `json:"responses"`
-		Data      data             `json:"data"`
-		Health    healthCheckStats `json:"health"`
-		SID       string           `json:"sid"`
+		Service   *string       `json:"service"`
+		Backup    bool          `json:"backup"`
+		Weight    int           `json:"weight"`
+		State     string        `json:"state"`
+		Selected  selected      `json:"selected"`
+		MaxConns  *int          `json:"max_conns"`
+		Responses responseStats `json:"responses"`
+		Data      data          `json:"data"`
+		Health    healthStats   `json:"health"`
+		SID       string        `json:"sid"`
 	} `json:"peers"`
 	Keepalive int `json:"keepalive"`
 	// Zombies   int `json:"zombies"`
@@ -187,34 +203,25 @@ type httpUpstreams map[string]struct {
 }
 
 type streamServerZones map[string]struct {
-	Processing  int            `json:"processing"`
-	Connections int            `json:"connections"`
-	Sessions    *responseStats `json:"sessions"`
-	Discarded   *int64         `json:"discarded"`
-	Received    int64          `json:"received"`
-	Sent        int64          `json:"sent"`
+	Ssl         *ssl             `json:"ssl"`
+	Connections connectionsStats `json:"connections"`
+	Sessions    sessionsStats    `json:"sessions"`
+	Data        data             `json:"data"`
 }
 
 type streamUpstreams map[string]struct {
-	Peers []struct {
-		ID            int              `json:"id"`
-		Server        string           `json:"server"`
-		Backup        bool             `json:"backup"`
-		Weight        int              `json:"weight"`
-		State         string           `json:"state"`
-		Active        int              `json:"active"`
-		Connections   int64            `json:"connections"`
-		ConnectTime   *int             `json:"connect_time"`
-		FirstByteTime *int             `json:"first_byte_time"`
-		ResponseTime  *int             `json:"response_time"`
-		Sent          int64            `json:"sent"`
-		Received      int64            `json:"received"`
-		Fails         int64            `json:"fails"`
-		Unavail       int64            `json:"unavail"`
-		HealthChecks  healthCheckStats `json:"health_checks"`
-		Downtime      int64            `json:"downtime"`
+	Peers map[string]struct {
+		Server   string      `json:"server"`
+		Service  *string     `json:"service"`
+		Backup   bool        `json:"backup"`
+		Weight   int         `json:"weight"`
+		State    string      `json:"state"`
+		Selected selected    `json:"selected"`
+		MaxConns *int        `json:"max_conns"`
+		Data     data        `json:"data"`
+		Health   healthStats `json:"health"`
 	} `json:"peers"`
-	Zombies int `json:"zombies"`
+	// Zombies int `json:"zombies"`
 }
 
 type basicHitStats struct {
@@ -249,7 +256,7 @@ type httpLimitReqs map[string]struct {
 	Exhausted int64 `json:"exhausted"`
 }
 
-type httpLimitConns map[string]struct {
+type limitConns map[string]struct {
 	Passed    int64 `json:"passed"`
 	Skipped   int64 `json:"skipped"`
 	Rejected  int64 `json:"rejected"`

@@ -28,9 +28,8 @@ const (
 	processesPath   = "processes"
 	connectionsPath = "connections"
 	slabsPath       = "slabs"
-	sslPath         = "ssl"
+	sslPath         = "ssl" // Will Angie ever provide this?
 
-	httpRequestsPath      = "http/requests"
 	httpServerZonesPath   = "http/server_zones"
 	httpLocationZonesPath = "http/location_zones"
 	httpUpstreamsPath     = "http/upstreams"
@@ -41,6 +40,7 @@ const (
 
 	streamServerZonesPath = "stream/server_zones"
 	streamUpstreamsPath   = "stream/upstreams"
+	streamLimitConnsPath  = "stream/limit_conns"
 )
 
 type AngieAPI struct {

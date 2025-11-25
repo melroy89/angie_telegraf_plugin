@@ -26,12 +26,13 @@ func (n *AngieAPI) gatherMetrics(addr *url.URL, acc telegraf.Accumulator) {
 	addError(acc, n.gatherHTTPServerZonesMetrics(addr, acc))
 	addError(acc, n.gatherHTTPUpstreamsMetrics(addr, acc))
 	addError(acc, n.gatherHTTPCachesMetrics(addr, acc))
-	// addError(acc, n.gatherStreamServerZonesMetrics(addr, acc))
-	// addError(acc, n.gatherStreamUpstreamsMetrics(addr, acc))
 	addError(acc, n.gatherHTTPLocationZonesMetrics(addr, acc))
 	addError(acc, n.gatherResolverZonesMetrics(addr, acc))
 	addError(acc, n.gatherHTTPLimitReqsMetrics(addr, acc))
 	addError(acc, n.gatherHTTPLimitConnsMetrics(addr, acc))
+	addError(acc, n.gatherStreamServerZonesMetrics(addr, acc))
+	addError(acc, n.gatherStreamUpstreamsMetrics(addr, acc))
+	addError(acc, n.gatherStreamLimitConnsMetrics(addr, acc))
 }
 
 func addError(acc telegraf.Accumulator, err error) {
@@ -230,11 +231,11 @@ func (n *AngieAPI) gatherHTTPServerZonesMetrics(addr *url.URL, acc telegraf.Accu
 			"angie_api_http_server_zones",
 			func() map[string]interface{} {
 				result := map[string]interface{}{
-					"total":      zone.Requests.Total,
-					"processing": zone.Requests.Processing,
-					"discarded":  zone.Requests.Discarded,
-					"received":   zone.Data.Received,
-					"sent":       zone.Data.Sent,
+					"requests_total":      zone.Requests.Total,
+					"requests_processing": zone.Requests.Processing,
+					"requests_discarded":  zone.Requests.Discarded,
+					"received":            zone.Data.Received,
+					"sent":                zone.Data.Sent,
 				}
 
 				// Response codes fields (only include those that are present)
@@ -423,11 +424,11 @@ func (n *AngieAPI) gatherHTTPLocationZonesMetrics(addr *url.URL, acc telegraf.Ac
 			"angie_api_http_location_zones",
 			func() map[string]interface{} {
 				result := map[string]interface{}{
-					"total":      zone.Requests.Total,
-					"processing": zone.Requests.Processing,
-					"discarded":  zone.Requests.Discarded,
-					"received":   zone.Data.Received,
-					"sent":       zone.Data.Sent,
+					"requests_total":      zone.Requests.Total,
+					"requests_processing": zone.Requests.Processing,
+					"requests_discarded":  zone.Requests.Discarded,
+					"received":            zone.Data.Received,
+					"sent":                zone.Data.Sent,
 				}
 
 				// Response codes fields (only include those that are present)
@@ -787,7 +788,7 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 			if peer.MaxConns != nil {
 				peerFields["max_conns"] = *peer.MaxConns
 			}
-			peerTags := make(map[string]string, len(upstreamTags)+3)
+			peerTags := make(map[string]string, len(upstreamTags)+2)
 			for k, v := range upstreamTags {
 				peerTags[k] = v
 			}
@@ -853,42 +854,6 @@ func (n *AngieAPI) gatherHTTPCachesMetrics(addr *url.URL, acc telegraf.Accumulat
 	return nil
 }
 
-// Not used (yet)
-func (n *AngieAPI) gatherStreamServerZonesMetrics(addr *url.URL, acc telegraf.Accumulator) error {
-	body, err := n.gatherURL(addr, streamServerZonesPath)
-	if err != nil {
-		return err
-	}
-
-	var streamServerZones streamServerZones
-
-	if err := json.Unmarshal(body, &streamServerZones); err != nil {
-		return err
-	}
-
-	tags := getTags(addr)
-
-	for zoneName, zone := range streamServerZones {
-		zoneTags := make(map[string]string, len(tags)+1)
-		for k, v := range tags {
-			zoneTags[k] = v
-		}
-		zoneTags["zone"] = zoneName
-		acc.AddFields(
-			"angie_api_stream_server_zones",
-			map[string]interface{}{
-				"processing":  zone.Processing,
-				"connections": zone.Connections,
-				"received":    zone.Received,
-				"sent":        zone.Sent,
-			},
-			zoneTags,
-		)
-	}
-
-	return nil
-}
-
 func (n *AngieAPI) gatherResolverZonesMetrics(addr *url.URL, acc telegraf.Accumulator) error {
 	body, err := n.gatherURL(addr, resolverZonesPath)
 	if err != nil {
@@ -935,76 +900,6 @@ func (n *AngieAPI) gatherResolverZonesMetrics(addr *url.URL, acc telegraf.Accumu
 	return nil
 }
 
-// Not used (yet)
-// func (n *AngieAPI) gatherStreamUpstreamsMetrics(addr *url.URL, acc telegraf.Accumulator) error {
-// 	body, err := n.gatherURL(addr, streamUpstreamsPath)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	var streamUpstreams streamUpstreams
-
-// 	if err := json.Unmarshal(body, &streamUpstreams); err != nil {
-// 		return err
-// 	}
-
-// 	tags := getTags(addr)
-
-// 	for upstreamName, upstream := range streamUpstreams {
-// 		upstreamTags := make(map[string]string, len(tags)+1)
-// 		for k, v := range tags {
-// 			upstreamTags[k] = v
-// 		}
-// 		upstreamTags["upstream"] = upstreamName
-// 		acc.AddFields(
-// 			"angie_api_stream_upstreams",
-// 			map[string]interface{}{
-// 				"zombies": upstream.Zombies,
-// 			},
-// 			upstreamTags,
-// 		)
-// 		for _, peer := range upstream.Peers {
-// 			peerFields := map[string]interface{}{
-// 				"backup":                 peer.Backup,
-// 				"weight":                 peer.Weight,
-// 				"state":                  peer.State,
-// 				"active":                 peer.Active,
-// 				"connections":            peer.Connections,
-// 				"sent":                   peer.Sent,
-// 				"received":               peer.Received,
-// 				"fails":                  peer.Fails,
-// 				"unavail":                peer.Unavail,
-// 				"healthchecks_checks":    peer.HealthChecks.Checks,
-// 				"healthchecks_fails":     peer.HealthChecks.Fails,
-// 				"healthchecks_unhealthy": peer.HealthChecks.Unhealthy,
-// 				"downtime":               peer.Downtime,
-// 			}
-// 			if peer.HealthChecks.LastPassed != nil {
-// 				peerFields["healthchecks_last_passed"] = *peer.HealthChecks.LastPassed
-// 			}
-// 			if peer.ConnectTime != nil {
-// 				peerFields["connect_time"] = *peer.ConnectTime
-// 			}
-// 			if peer.FirstByteTime != nil {
-// 				peerFields["first_byte_time"] = *peer.FirstByteTime
-// 			}
-// 			if peer.ResponseTime != nil {
-// 				peerFields["response_time"] = *peer.ResponseTime
-// 			}
-// 			peerTags := make(map[string]string, len(upstreamTags)+2)
-// 			for k, v := range upstreamTags {
-// 				peerTags[k] = v
-// 			}
-// 			peerTags["upstream_address"] = peer.Server
-// 			peerTags["id"] = strconv.Itoa(peer.ID)
-
-// 			acc.AddFields("angie_api_stream_upstream_peers", peerFields, peerTags)
-// 		}
-// 	}
-
-// 	return nil
-// }
-
 func (n *AngieAPI) gatherHTTPLimitReqsMetrics(addr *url.URL, acc telegraf.Accumulator) error {
 	body, err := n.gatherURL(addr, httpLimitReqsPath)
 	if err != nil {
@@ -1047,7 +942,7 @@ func (n *AngieAPI) gatherHTTPLimitConnsMetrics(addr *url.URL, acc telegraf.Accum
 		return err
 	}
 
-	var httpLimitConns httpLimitConns
+	var httpLimitConns limitConns
 
 	if err := json.Unmarshal(body, &httpLimitConns); err != nil {
 		return err
@@ -1076,16 +971,161 @@ func (n *AngieAPI) gatherHTTPLimitConnsMetrics(addr *url.URL, acc telegraf.Accum
 	return nil
 }
 
+func (n *AngieAPI) gatherStreamServerZonesMetrics(addr *url.URL, acc telegraf.Accumulator) error {
+	body, err := n.gatherURL(addr, streamServerZonesPath)
+	if err != nil {
+		return err
+	}
+
+	var streamServerZones streamServerZones
+
+	if err := json.Unmarshal(body, &streamServerZones); err != nil {
+		return err
+	}
+
+	tags := getTags(addr)
+
+	for zoneName, zone := range streamServerZones {
+		zoneTags := make(map[string]string, len(tags)+1)
+		for k, v := range tags {
+			zoneTags[k] = v
+		}
+		zoneTags["zone"] = zoneName
+
+		acc.AddFields(
+			"angie_api_stream_server_zones",
+			func() map[string]interface{} {
+				result := map[string]interface{}{
+					"connections_total":            zone.Connections.Total,
+					"connections_processing":       zone.Connections.Processing,
+					"connections_discarded":        zone.Connections.Discarded,
+					"sessions_success":             zone.Sessions.Success,
+					"sessions_invalid":             zone.Sessions.Invalid,
+					"sessions_forbidden":           zone.Sessions.Forbidden,
+					"sessions_internal_error":      zone.Sessions.InternalError,
+					"sessions_bad_gateway":         zone.Sessions.BadGateway,
+					"sessions_service_unavailable": zone.Sessions.ServiceUnavailable,
+					"received":                     zone.Data.Received,
+					"sent":                         zone.Data.Sent,
+				}
+				// SSL (if present)
+				if zone.Ssl != nil {
+					result["ssl_handhaked"] = zone.Ssl.Handshaked
+					result["ssl_reuses"] = zone.Ssl.Reuses
+					result["ssl_timedout"] = zone.Ssl.TimedOut
+					result["ssl_failed"] = zone.Ssl.Failed
+				}
+				return result
+			}(),
+			zoneTags,
+		)
+	}
+
+	return nil
+}
+
+func (n *AngieAPI) gatherStreamUpstreamsMetrics(addr *url.URL, acc telegraf.Accumulator) error {
+	body, err := n.gatherURL(addr, streamUpstreamsPath)
+	if err != nil {
+		return err
+	}
+
+	var streamUpstreams streamUpstreams
+
+	if err := json.Unmarshal(body, &streamUpstreams); err != nil {
+		return err
+	}
+
+	tags := getTags(addr)
+
+	for upstreamName, upstream := range streamUpstreams {
+		upstreamTags := make(map[string]string, len(tags)+1)
+		for k, v := range tags {
+			upstreamTags[k] = v
+		}
+		upstreamTags["upstream"] = upstreamName
+		for peerName, peer := range upstream.Peers {
+			peerFields := map[string]interface{}{
+				"backup":             peer.Backup,
+				"weight":             peer.Weight,
+				"state":              peer.State,
+				"selected_current":   peer.Selected.Current,
+				"selected_total":     peer.Selected.Total,
+				"sent":               peer.Data.Sent,
+				"received":           peer.Data.Received,
+				"health_fails":       peer.Health.Fails,
+				"health_unavailable": peer.Health.Unavailable,
+				"health_downtime":    peer.Health.Downtime,
+			}
+			// Optional fields
+			if peer.Service != nil {
+				peerFields["service"] = *peer.Service
+			}
+			if peer.MaxConns != nil {
+				peerFields["max_conns"] = *peer.MaxConns
+			}
+			if peer.Health.Downstart != nil {
+				peerFields["health_downstart"] = *peer.Health.Downstart
+			}
+
+			peerTags := make(map[string]string, len(upstreamTags)+1)
+			for k, v := range upstreamTags {
+				peerTags[k] = v
+			}
+			peerTags["peer"] = peerName
+			acc.AddFields("angie_api_stream_upstream_peers", peerFields, peerTags)
+		}
+	}
+
+	return nil
+}
+
+func (n *AngieAPI) gatherStreamLimitConnsMetrics(addr *url.URL, acc telegraf.Accumulator) error {
+	body, err := n.gatherURL(addr, streamLimitConnsPath)
+	if err != nil {
+		return err
+	}
+
+	var streamLimitConns limitConns
+
+	if err := json.Unmarshal(body, &streamLimitConns); err != nil {
+		return err
+	}
+
+	tags := getTags(addr)
+
+	for limitConnName, limit := range streamLimitConns {
+		limitConnsTags := make(map[string]string, len(tags)+1)
+		for k, v := range tags {
+			limitConnsTags[k] = v
+		}
+		limitConnsTags["limit"] = limitConnName
+		acc.AddFields(
+			"angie_api_stream_limit_conns",
+			map[string]interface{}{
+				"passed":    limit.Passed,
+				"skipped":   limit.Skipped,
+				"rejected":  limit.Rejected,
+				"exhausted": limit.Exhausted,
+			},
+			limitConnsTags,
+		)
+	}
+
+	return nil
+}
+
 func getTags(addr *url.URL) map[string]string {
 	h := addr.Host
 	host, port, err := net.SplitHostPort(h)
 	if err != nil {
 		host = addr.Host
-		if addr.Scheme == "http" {
+		switch addr.Scheme {
+		case "http":
 			port = "80"
-		} else if addr.Scheme == "https" {
+		case "https":
 			port = "443"
-		} else {
+		default:
 			port = ""
 		}
 	}

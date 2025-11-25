@@ -232,6 +232,7 @@ make rundev
   - state
   - selected_current
   - selected_total
+  - selected_last (if present)
 	- sent
 	- received      
   - health_fails

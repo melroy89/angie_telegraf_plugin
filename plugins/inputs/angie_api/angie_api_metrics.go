@@ -22,7 +22,6 @@ func (n *AngieAPI) gatherMetrics(addr *url.URL, acc telegraf.Accumulator) {
 	addError(acc, n.gatherProcessesMetrics(addr, acc))
 	addError(acc, n.gatherConnectionsMetrics(addr, acc))
 	addError(acc, n.gatherSlabsMetrics(addr, acc))
-	// addError(acc, n.gatherSslMetrics(addr, acc))
 	addError(acc, n.gatherHTTPServerZonesMetrics(addr, acc))
 	addError(acc, n.gatherHTTPUpstreamsMetrics(addr, acc))
 	addError(acc, n.gatherHTTPCachesMetrics(addr, acc))
@@ -183,31 +182,6 @@ func (n *AngieAPI) gatherSlabsMetrics(addr *url.URL, acc telegraf.Accumulator) e
 	return nil
 }
 
-// func (n *AngieAPI) gatherSslMetrics(addr *url.URL, acc telegraf.Accumulator) error {
-// 	body, err := n.gatherURL(addr, sslPath)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	var ssl = &ssl{}
-
-// 	if err := json.Unmarshal(body, ssl); err != nil {
-// 		return err
-// 	}
-
-// 	acc.AddFields(
-// 		"angie_api_ssl",
-// 		map[string]interface{}{
-// 			"handshakes":        ssl.Handshakes,
-// 			"handshakes_failed": ssl.HandshakesFailed,
-// 			"session_reuses":    ssl.SessionReuses,
-// 		},
-// 		getTags(addr),
-// 	)
-
-// 	return nil
-// }
-
 func (n *AngieAPI) gatherHTTPServerZonesMetrics(addr *url.URL, acc telegraf.Accumulator) error {
 	body, err := n.gatherURL(addr, httpServerZonesPath)
 	if err != nil {
@@ -240,148 +214,148 @@ func (n *AngieAPI) gatherHTTPServerZonesMetrics(addr *url.URL, acc telegraf.Accu
 
 				// Response codes fields (only include those that are present)
 				if zone.Responses.Response100 != nil {
-					result["responses_100"] = zone.Responses.Response100
+					result["responses_100"] = *zone.Responses.Response100
 				}
 				if zone.Responses.Response101 != nil {
-					result["responses_101"] = zone.Responses.Response101
+					result["responses_101"] = *zone.Responses.Response101
 				}
 				if zone.Responses.Response102 != nil {
-					result["responses_102"] = zone.Responses.Response102
+					result["responses_102"] = *zone.Responses.Response102
 				}
 				if zone.Responses.Response200 != nil {
-					result["responses_200"] = zone.Responses.Response200
+					result["responses_200"] = *zone.Responses.Response200
 				}
 				if zone.Responses.Response201 != nil {
-					result["responses_201"] = zone.Responses.Response201
+					result["responses_201"] = *zone.Responses.Response201
 				}
 				if zone.Responses.Response202 != nil {
-					result["responses_202"] = zone.Responses.Response202
+					result["responses_202"] = *zone.Responses.Response202
 				}
 				if zone.Responses.Response203 != nil {
-					result["responses_203"] = zone.Responses.Response203
+					result["responses_203"] = *zone.Responses.Response203
 				}
 				if zone.Responses.Response204 != nil {
-					result["responses_204"] = zone.Responses.Response204
+					result["responses_204"] = *zone.Responses.Response204
 				}
 				if zone.Responses.Response205 != nil {
-					result["responses_205"] = zone.Responses.Response205
+					result["responses_205"] = *zone.Responses.Response205
 				}
 				if zone.Responses.Response206 != nil {
-					result["responses_206"] = zone.Responses.Response206
+					result["responses_206"] = *zone.Responses.Response206
 				}
 				if zone.Responses.Response300 != nil {
-					result["responses_300"] = zone.Responses.Response300
+					result["responses_300"] = *zone.Responses.Response300
 				}
 				if zone.Responses.Response301 != nil {
-					result["responses_301"] = zone.Responses.Response301
+					result["responses_301"] = *zone.Responses.Response301
 				}
 				if zone.Responses.Response302 != nil {
-					result["responses_302"] = zone.Responses.Response302
+					result["responses_302"] = *zone.Responses.Response302
 				}
 				if zone.Responses.Response303 != nil {
-					result["responses_303"] = zone.Responses.Response303
+					result["responses_303"] = *zone.Responses.Response303
 				}
 				if zone.Responses.Response304 != nil {
-					result["responses_304"] = zone.Responses.Response304
+					result["responses_304"] = *zone.Responses.Response304
 				}
 				if zone.Responses.Response305 != nil {
-					result["responses_305"] = zone.Responses.Response305
+					result["responses_305"] = *zone.Responses.Response305
 				}
 				if zone.Responses.Response307 != nil {
-					result["responses_307"] = zone.Responses.Response307
+					result["responses_307"] = *zone.Responses.Response307
 				}
 				if zone.Responses.Response308 != nil {
-					result["responses_308"] = zone.Responses.Response308
+					result["responses_308"] = *zone.Responses.Response308
 				}
 				if zone.Responses.Response400 != nil {
-					result["responses_400"] = zone.Responses.Response400
+					result["responses_400"] = *zone.Responses.Response400
 				}
 				if zone.Responses.Response401 != nil {
-					result["responses_401"] = zone.Responses.Response401
+					result["responses_401"] = *zone.Responses.Response401
 				}
 				if zone.Responses.Response402 != nil {
-					result["responses_402"] = zone.Responses.Response402
+					result["responses_402"] = *zone.Responses.Response402
 				}
 				if zone.Responses.Response403 != nil {
-					result["responses_403"] = zone.Responses.Response403
+					result["responses_403"] = *zone.Responses.Response403
 				}
 				if zone.Responses.Response404 != nil {
-					result["responses_404"] = zone.Responses.Response404
+					result["responses_404"] = *zone.Responses.Response404
 				}
 				if zone.Responses.Response405 != nil {
-					result["responses_405"] = zone.Responses.Response405
+					result["responses_405"] = *zone.Responses.Response405
 				}
 				if zone.Responses.Response406 != nil {
-					result["responses_406"] = zone.Responses.Response406
+					result["responses_406"] = *zone.Responses.Response406
 				}
 				if zone.Responses.Response407 != nil {
-					result["responses_407"] = zone.Responses.Response407
+					result["responses_407"] = *zone.Responses.Response407
 				}
 				if zone.Responses.Response408 != nil {
-					result["responses_408"] = zone.Responses.Response408
+					result["responses_408"] = *zone.Responses.Response408
 				}
 				if zone.Responses.Response409 != nil {
-					result["responses_409"] = zone.Responses.Response409
+					result["responses_409"] = *zone.Responses.Response409
 				}
 				if zone.Responses.Response410 != nil {
-					result["responses_410"] = zone.Responses.Response410
+					result["responses_410"] = *zone.Responses.Response410
 				}
 				if zone.Responses.Response411 != nil {
-					result["responses_411"] = zone.Responses.Response411
+					result["responses_411"] = *zone.Responses.Response411
 				}
 				if zone.Responses.Response412 != nil {
-					result["responses_412"] = zone.Responses.Response412
+					result["responses_412"] = *zone.Responses.Response412
 				}
 				if zone.Responses.Response413 != nil {
-					result["responses_413"] = zone.Responses.Response413
+					result["responses_413"] = *zone.Responses.Response413
 				}
 				if zone.Responses.Response421 != nil {
-					result["responses_421"] = zone.Responses.Response421
+					result["responses_421"] = *zone.Responses.Response421
 				}
 				if zone.Responses.Response422 != nil {
-					result["responses_422"] = zone.Responses.Response422
+					result["responses_422"] = *zone.Responses.Response422
 				}
 				if zone.Responses.Response423 != nil {
-					result["responses_423"] = zone.Responses.Response423
+					result["responses_423"] = *zone.Responses.Response423
 				}
 				if zone.Responses.Response424 != nil {
-					result["responses_424"] = zone.Responses.Response424
+					result["responses_424"] = *zone.Responses.Response424
 				}
 				if zone.Responses.Response425 != nil {
-					result["responses_425"] = zone.Responses.Response425
+					result["responses_425"] = *zone.Responses.Response425
 				}
 				if zone.Responses.Response426 != nil {
-					result["responses_426"] = zone.Responses.Response426
+					result["responses_426"] = *zone.Responses.Response426
 				}
 				if zone.Responses.Response428 != nil {
-					result["responses_428"] = zone.Responses.Response428
+					result["responses_428"] = *zone.Responses.Response428
 				}
 				if zone.Responses.Response429 != nil {
-					result["responses_429"] = zone.Responses.Response429
+					result["responses_429"] = *zone.Responses.Response429
 				}
 				if zone.Responses.Response431 != nil {
-					result["responses_431"] = zone.Responses.Response431
+					result["responses_431"] = *zone.Responses.Response431
 				}
 				if zone.Responses.Response500 != nil {
-					result["responses_500"] = zone.Responses.Response500
+					result["responses_500"] = *zone.Responses.Response500
 				}
 				if zone.Responses.Response501 != nil {
-					result["responses_501"] = zone.Responses.Response501
+					result["responses_501"] = *zone.Responses.Response501
 				}
 				if zone.Responses.Response502 != nil {
-					result["responses_502"] = zone.Responses.Response502
+					result["responses_502"] = *zone.Responses.Response502
 				}
 				if zone.Responses.Response503 != nil {
-					result["responses_503"] = zone.Responses.Response503
+					result["responses_503"] = *zone.Responses.Response503
 				}
 				if zone.Responses.Response504 != nil {
-					result["responses_504"] = zone.Responses.Response504
+					result["responses_504"] = *zone.Responses.Response504
 				}
 				if zone.Responses.Response505 != nil {
-					result["responses_505"] = zone.Responses.Response505
+					result["responses_505"] = *zone.Responses.Response505
 				}
 				if zone.Responses.Response511 != nil {
-					result["responses_511"] = zone.Responses.Response511
+					result["responses_511"] = *zone.Responses.Response511
 				}
 
 				// SSL (if present)
@@ -433,148 +407,148 @@ func (n *AngieAPI) gatherHTTPLocationZonesMetrics(addr *url.URL, acc telegraf.Ac
 
 				// Response codes fields (only include those that are present)
 				if zone.Responses.Response100 != nil {
-					result["responses_100"] = zone.Responses.Response100
+					result["responses_100"] = *zone.Responses.Response100
 				}
 				if zone.Responses.Response101 != nil {
-					result["responses_101"] = zone.Responses.Response101
+					result["responses_101"] = *zone.Responses.Response101
 				}
 				if zone.Responses.Response102 != nil {
-					result["responses_102"] = zone.Responses.Response102
+					result["responses_102"] = *zone.Responses.Response102
 				}
 				if zone.Responses.Response200 != nil {
-					result["responses_200"] = zone.Responses.Response200
+					result["responses_200"] = *zone.Responses.Response200
 				}
 				if zone.Responses.Response201 != nil {
-					result["responses_201"] = zone.Responses.Response201
+					result["responses_201"] = *zone.Responses.Response201
 				}
 				if zone.Responses.Response202 != nil {
-					result["responses_202"] = zone.Responses.Response202
+					result["responses_202"] = *zone.Responses.Response202
 				}
 				if zone.Responses.Response203 != nil {
-					result["responses_203"] = zone.Responses.Response203
+					result["responses_203"] = *zone.Responses.Response203
 				}
 				if zone.Responses.Response204 != nil {
-					result["responses_204"] = zone.Responses.Response204
+					result["responses_204"] = *zone.Responses.Response204
 				}
 				if zone.Responses.Response205 != nil {
-					result["responses_205"] = zone.Responses.Response205
+					result["responses_205"] = *zone.Responses.Response205
 				}
 				if zone.Responses.Response206 != nil {
-					result["responses_206"] = zone.Responses.Response206
+					result["responses_206"] = *zone.Responses.Response206
 				}
 				if zone.Responses.Response300 != nil {
-					result["responses_300"] = zone.Responses.Response300
+					result["responses_300"] = *zone.Responses.Response300
 				}
 				if zone.Responses.Response301 != nil {
-					result["responses_301"] = zone.Responses.Response301
+					result["responses_301"] = *zone.Responses.Response301
 				}
 				if zone.Responses.Response302 != nil {
-					result["responses_302"] = zone.Responses.Response302
+					result["responses_302"] = *zone.Responses.Response302
 				}
 				if zone.Responses.Response303 != nil {
-					result["responses_303"] = zone.Responses.Response303
+					result["responses_303"] = *zone.Responses.Response303
 				}
 				if zone.Responses.Response304 != nil {
-					result["responses_304"] = zone.Responses.Response304
+					result["responses_304"] = *zone.Responses.Response304
 				}
 				if zone.Responses.Response305 != nil {
-					result["responses_305"] = zone.Responses.Response305
+					result["responses_305"] = *zone.Responses.Response305
 				}
 				if zone.Responses.Response307 != nil {
-					result["responses_307"] = zone.Responses.Response307
+					result["responses_307"] = *zone.Responses.Response307
 				}
 				if zone.Responses.Response308 != nil {
-					result["responses_308"] = zone.Responses.Response308
+					result["responses_308"] = *zone.Responses.Response308
 				}
 				if zone.Responses.Response400 != nil {
-					result["responses_400"] = zone.Responses.Response400
+					result["responses_400"] = *zone.Responses.Response400
 				}
 				if zone.Responses.Response401 != nil {
-					result["responses_401"] = zone.Responses.Response401
+					result["responses_401"] = *zone.Responses.Response401
 				}
 				if zone.Responses.Response402 != nil {
-					result["responses_402"] = zone.Responses.Response402
+					result["responses_402"] = *zone.Responses.Response402
 				}
 				if zone.Responses.Response403 != nil {
-					result["responses_403"] = zone.Responses.Response403
+					result["responses_403"] = *zone.Responses.Response403
 				}
 				if zone.Responses.Response404 != nil {
-					result["responses_404"] = zone.Responses.Response404
+					result["responses_404"] = *zone.Responses.Response404
 				}
 				if zone.Responses.Response405 != nil {
-					result["responses_405"] = zone.Responses.Response405
+					result["responses_405"] = *zone.Responses.Response405
 				}
 				if zone.Responses.Response406 != nil {
-					result["responses_406"] = zone.Responses.Response406
+					result["responses_406"] = *zone.Responses.Response406
 				}
 				if zone.Responses.Response407 != nil {
-					result["responses_407"] = zone.Responses.Response407
+					result["responses_407"] = *zone.Responses.Response407
 				}
 				if zone.Responses.Response408 != nil {
-					result["responses_408"] = zone.Responses.Response408
+					result["responses_408"] = *zone.Responses.Response408
 				}
 				if zone.Responses.Response409 != nil {
-					result["responses_409"] = zone.Responses.Response409
+					result["responses_409"] = *zone.Responses.Response409
 				}
 				if zone.Responses.Response410 != nil {
-					result["responses_410"] = zone.Responses.Response410
+					result["responses_410"] = *zone.Responses.Response410
 				}
 				if zone.Responses.Response411 != nil {
-					result["responses_411"] = zone.Responses.Response411
+					result["responses_411"] = *zone.Responses.Response411
 				}
 				if zone.Responses.Response412 != nil {
-					result["responses_412"] = zone.Responses.Response412
+					result["responses_412"] = *zone.Responses.Response412
 				}
 				if zone.Responses.Response413 != nil {
-					result["responses_413"] = zone.Responses.Response413
+					result["responses_413"] = *zone.Responses.Response413
 				}
 				if zone.Responses.Response421 != nil {
-					result["responses_421"] = zone.Responses.Response421
+					result["responses_421"] = *zone.Responses.Response421
 				}
 				if zone.Responses.Response422 != nil {
-					result["responses_422"] = zone.Responses.Response422
+					result["responses_422"] = *zone.Responses.Response422
 				}
 				if zone.Responses.Response423 != nil {
-					result["responses_423"] = zone.Responses.Response423
+					result["responses_423"] = *zone.Responses.Response423
 				}
 				if zone.Responses.Response424 != nil {
-					result["responses_424"] = zone.Responses.Response424
+					result["responses_424"] = *zone.Responses.Response424
 				}
 				if zone.Responses.Response425 != nil {
-					result["responses_425"] = zone.Responses.Response425
+					result["responses_425"] = *zone.Responses.Response425
 				}
 				if zone.Responses.Response426 != nil {
-					result["responses_426"] = zone.Responses.Response426
+					result["responses_426"] = *zone.Responses.Response426
 				}
 				if zone.Responses.Response428 != nil {
-					result["responses_428"] = zone.Responses.Response428
+					result["responses_428"] = *zone.Responses.Response428
 				}
 				if zone.Responses.Response429 != nil {
-					result["responses_429"] = zone.Responses.Response429
+					result["responses_429"] = *zone.Responses.Response429
 				}
 				if zone.Responses.Response431 != nil {
-					result["responses_431"] = zone.Responses.Response431
+					result["responses_431"] = *zone.Responses.Response431
 				}
 				if zone.Responses.Response500 != nil {
-					result["responses_500"] = zone.Responses.Response500
+					result["responses_500"] = *zone.Responses.Response500
 				}
 				if zone.Responses.Response501 != nil {
-					result["responses_501"] = zone.Responses.Response501
+					result["responses_501"] = *zone.Responses.Response501
 				}
 				if zone.Responses.Response502 != nil {
-					result["responses_502"] = zone.Responses.Response502
+					result["responses_502"] = *zone.Responses.Response502
 				}
 				if zone.Responses.Response503 != nil {
-					result["responses_503"] = zone.Responses.Response503
+					result["responses_503"] = *zone.Responses.Response503
 				}
 				if zone.Responses.Response504 != nil {
-					result["responses_504"] = zone.Responses.Response504
+					result["responses_504"] = *zone.Responses.Response504
 				}
 				if zone.Responses.Response505 != nil {
-					result["responses_505"] = zone.Responses.Response505
+					result["responses_505"] = *zone.Responses.Response505
 				}
 				if zone.Responses.Response511 != nil {
-					result["responses_511"] = zone.Responses.Response511
+					result["responses_511"] = *zone.Responses.Response511
 				}
 				return result
 			}(),
@@ -628,11 +602,11 @@ func (n *AngieAPI) gatherHTTPUpstreamsMetrics(addr *url.URL, acc telegraf.Accumu
 			}
 			// Optional selected last data field
 			if peer.Selected.Last != nil {
-				peerFields["selected_last"] = peer.Selected.Last
+				peerFields["selected_last"] = *peer.Selected.Last
 			}
 			// Optional downstart field (only present if peer became unavailable)
 			if peer.Health.Downstart != nil {
-				peerFields["health_downstart"] = peer.Health.Downstart
+				peerFields["health_downstart"] = *peer.Health.Downstart
 			}
 
 			// Only include codes fields that are present (and only the important ones)
@@ -1058,6 +1032,9 @@ func (n *AngieAPI) gatherStreamUpstreamsMetrics(addr *url.URL, acc telegraf.Accu
 				"health_downtime":    peer.Health.Downtime,
 			}
 			// Optional fields
+			if peer.Selected.Last != nil {
+				peerFields["selected_last"] = *peer.Selected.Last
+			}
 			if peer.Service != nil {
 				peerFields["service"] = *peer.Service
 			}
@@ -1067,7 +1044,6 @@ func (n *AngieAPI) gatherStreamUpstreamsMetrics(addr *url.URL, acc telegraf.Accu
 			if peer.Health.Downstart != nil {
 				peerFields["health_downstart"] = *peer.Health.Downstart
 			}
-
 			peerTags := make(map[string]string, len(upstreamTags)+1)
 			for k, v := range upstreamTags {
 				peerTags[k] = v

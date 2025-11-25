@@ -28,7 +28,6 @@ const (
 	processesPath   = "processes"
 	connectionsPath = "connections"
 	slabsPath       = "slabs"
-	sslPath         = "ssl" // Will Angie ever provide this?
 
 	httpServerZonesPath   = "http/server_zones"
 	httpLocationZonesPath = "http/location_zones"

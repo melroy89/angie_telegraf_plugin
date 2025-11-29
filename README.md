@@ -67,6 +67,10 @@ See the [CONFIGURATION.md](https://github.com/influxdata/telegraf/blob/master/do
 
 This Telegraf plugin _could_ be used together with [my matching Grafana Angie Metrics Dashboard](https://grafana.com/grafana/dashboards/24461-angie-metrics/).
 
+Example screenshot of the Grafana dashboard:
+
+![Angie dashboard in Grafana using Angie Telegraf plugin](./grafana_angie_dashboard.png)
+
 ## Developers
 
 For developers (thank you for contributing), first make a copy of the `plugin.conf` and call it `dev.conf`:

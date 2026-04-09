@@ -70,6 +70,7 @@ This Telegraf plugin _could_ be used together with [my matching Grafana Angie Me
 Example screenshot of the Grafana dashboard:
 
 ![Angie dashboard in Grafana using Angie Telegraf plugin](./grafana_angie_dashboard.png)
+![Angie dashboard in Grafana using Angie Telegraf plugin nr2](./grafana_angie_dashboard_2.png)
 
 ## Developers
 
